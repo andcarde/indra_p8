@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "libros")
 @Data
@@ -14,7 +16,7 @@ public class Libro {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column
     private String titulo;
@@ -28,6 +30,10 @@ public class Libro {
     @Column
     private int anyo;
 
-    @ManyToOne(mappedBy = "libro")
-    Autor autor;
+    @ManyToOne
+    @JoinColumn(name = "id_autor", nullable = false)
+    private Autor autor;
+
+    @OneToMany(mappedBy = "id_libro")
+    private List<Copia> copias;
 }

@@ -26,7 +26,7 @@ public class Autor {
     @Column
     private String nacionalidad;
 
-    @Column
+    @Column(name = "fecha_nac")
     private Date fechaNac;
 
     @OneToMany(mappedBy = "autor")

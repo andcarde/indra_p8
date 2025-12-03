@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "lectores")
@@ -14,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class Lector {
 
-    @Column
+    @Column(name = "n_socio")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long nSocio;
@@ -27,6 +28,9 @@ public class Lector {
 
     @Column
     private String direccion;
+
+    @OneToMany(mappedBy = "lector")
+    private List<Prestamo> prestamos;
 
     public void devolver(long id, Date fechaAct) {
 

@@ -12,28 +12,29 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@IdClass(PrestamoId.class)
 public class Prestamo {
 
-    @Column(name = "libro_id")
+    @Column(name = "copia_id")
     @Id
-    long idLibro;
+    long idCopia;
 
-    @Column(name = "lector_id")
+    @Column(name = "lector")
     @Id
     long idLector;
 
-    @Column
+    @Column(nullable = false)
     @Id
     Date inicio;
 
     @Column
     Date fin;
 
-    @ManyToOne
-    @JoinColumn(name = "libro_id")
-    Libro libro;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "copia_id")
+    Copia copia;
 
-    @ManyToOne
-    @JoinColumn(name = "lector_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "n_socio")
     Lector lector;
 }
