@@ -38,18 +38,9 @@ public class Lector {
 
     public void devolver(long id, Date fechaAct) {
         Copia copia = service.getCopia(id).orElse(null);
+        Prestamo prestamo = service.getPrestamo(id).orElse(null);
         if (copia != null) {
-            Date fechaActual = new Date();
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(fechaActual);
-            calendar.add(Calendar.DAY_OF_MONTH, 30); // suma 30 días
-            Date fechaDevolucion = calendar.getTime();
-            Prestamo prestamo = new Prestamo();
-            prestamo.setLector(this);
-            prestamo.setCopia(copia);
-            prestamo.setInicio(fechaActual);
-            prestamo.setFin(fechaDevolucion);
-            em.persist(prestamo);
+            Date fechaDevolucion = prestamo.getFin();
         }
     }
     public void prestar(long id, Date fechaAct) {
