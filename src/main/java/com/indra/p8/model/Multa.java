@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "multas")
@@ -14,18 +14,17 @@ import java.util.Date;
 @NoArgsConstructor
 public class Multa {
 
-    @Column(name = "lector_id")
     @Id
-    long idLector;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Id
     @Column(name = "f_inicio")
-    Date fInicio;
+    private LocalDate fInicio;
 
     @Column(name = "f_fin")
-    Date fFin;
+    private LocalDate fFin;
 
     @OneToOne
-    @JoinColumn(name = "id_lector", nullable = false, insertable = false, updatable = false)
-    Lector lector;
+    @JoinColumn(name = "id_lector", nullable = false)
+    private Lector lector;
 }

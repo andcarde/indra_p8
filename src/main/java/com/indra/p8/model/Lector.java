@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -19,7 +16,8 @@ public class Lector {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long nSocio;
+    @Column(name = "n_socio")
+    private Long nSocio;
 
     @Column
     private String nombre;
@@ -30,7 +28,7 @@ public class Lector {
     @Column
     private String direccion;
 
-    @OneToMany(mappedBy = "lector_id")
+    @OneToMany(mappedBy = "lector")
     private List<Prestamo> prestamos;
 
     @OneToOne(mappedBy = "lector", cascade = CascadeType.ALL)

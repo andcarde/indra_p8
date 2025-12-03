@@ -18,7 +18,7 @@ public class Copia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private EstadoCopia estado;
 
     @ManyToOne(optional = false)

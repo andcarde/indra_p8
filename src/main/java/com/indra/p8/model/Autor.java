@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -15,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Autor {
 
-    @Column
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,7 +26,7 @@ public class Autor {
     private String nacionalidad;
 
     @Column(name = "fecha_nac")
-    private Date fechaNac;
+    private LocalDate fechaNac;
 
     @OneToMany(mappedBy = "autor")
     private List<Libro> libros;

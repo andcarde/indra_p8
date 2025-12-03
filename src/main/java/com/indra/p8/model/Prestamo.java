@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -14,26 +15,21 @@ import java.util.Date;
 @NoArgsConstructor
 public class Prestamo {
 
-    @Column(name = "copia_id")
     @Id
-    long idCopia;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name = "lector_id")
-    @Id
-    long idLector;
+    @Column(name = "fecha_retiro", nullable = false)
+    private LocalDate inicio;
 
-    @Column(nullable = false)
-    @Id
-    Date inicio;
-
-    @Column
-    Date fin;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "copia_id")
-    Copia copia;
+    @Column(name = "fecha_devolucion")
+    private LocalDate fin;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "lector_id")
-    Lector lector;
+    private Lector lector;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "copia_id")
+    private Copia copia;
 }

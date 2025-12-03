@@ -21,8 +21,8 @@ public class Libro {
     @Column
     private String titulo;
 
-    @Column
-    private String tipo;
+    @Enumerated(EnumType.STRING)
+    private TipoLibro tipo;
 
     @Column
     private String editorial;
