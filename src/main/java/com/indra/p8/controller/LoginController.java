@@ -3,15 +3,14 @@ package com.indra.p8.controller;
 
 import com.indra.p8.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
 
-@Controller
+@RestController
+@RequestMapping("/login")
 public class LoginController {
 
     @Autowired
@@ -50,7 +49,8 @@ public class LoginController {
     }
 
     @PostMapping("/crearBibliotecario")
-    public void crearAutor(@RequestBody String username, @RequestBody String password) {
+    public ResponseEntity<String> crearBibliotecario(@RequestParam String username, @RequestParam String password) {
         loginService.crearBibliotecario(username, password);
+        return ResponseEntity.ok("Bibliotecario creado");
     }
 }

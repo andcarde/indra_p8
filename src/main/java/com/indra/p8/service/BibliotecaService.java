@@ -1,5 +1,6 @@
 package com.indra.p8.service;
 
+import com.indra.p8.DTOs.CrearLibroDTO;
 import com.indra.p8.model.*;
 
 import java.util.Date;
@@ -7,7 +8,7 @@ import java.util.List;
 
 public interface BibliotecaService {
     Autor crearAutor(Autor autor);
-    Libro crearLibro(Libro libro);
+    Libro crearLibro(CrearLibroDTO dto);
     List<Copia> crearCopia(Long idLibro, int nCopias);
     boolean devolver(Long idPrestamo);
     String prestar(Long idLector, Long idCopia);

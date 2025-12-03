@@ -1,6 +1,7 @@
 package com.indra.p8.controller;
 
 
+import com.indra.p8.DTOs.CrearLibroDTO;
 import com.indra.p8.model.*;
 import com.indra.p8.service.BibliotecaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +34,10 @@ public class BibliotecaController {
     }
 
     @PostMapping("/crearlibro")
-    public void crearLibro(@RequestBody Libro libro) {
-        service.crearLibro(libro);
+    public void crearLibro(@RequestBody CrearLibroDTO dto) {
+        service.crearLibro(dto);
     }
+
     @PostMapping("/crearcopia")
     public List<Copia> crearCopia(@RequestBody Long idLibro, @RequestBody int ncopias) {
         List<Copia> copias;

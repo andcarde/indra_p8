@@ -1,6 +1,7 @@
 package com.indra.p8.service;
 
 
+import com.indra.p8.DTOs.CrearLibroDTO;
 import com.indra.p8.model.*;
 import com.indra.p8.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,16 @@ public class BibliotecaServiceImp implements BibliotecaService {
     }
 
     @Override
-    public Libro crearLibro(Libro libro) {
+    public Libro crearLibro(CrearLibroDTO dto) {
+        Long idAutor=dto.getIdAutor();
+        Autor autor = autorRepository.findById(idAutor)
+                .orElseThrow(() -> new RuntimeException("Autor no encontrado"));
+        Libro libro = new Libro();
+        libro.setTitulo(dto.getTitulo());
+        libro.setTipo(dto.getTipo());
+        libro.setEditorial(dto.getEditorial());
+        libro.setAnyo(dto.getAnyo());
+        libro.setAutor(autor);
         libroRepository.save(libro);
         return libro;
     }
