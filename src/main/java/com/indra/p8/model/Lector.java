@@ -1,11 +1,11 @@
 package com.indra.p8.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "lectores")
@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 public class Lector {
 
     @Column
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long nSocio;
     @Column
     private String nombre;

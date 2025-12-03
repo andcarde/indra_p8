@@ -1,4 +1,5 @@
 package com.indra.p8.repository;
 
-public class LibroRepository {
-}
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public class LibroRepository extends JpaRepository<Libro,Integer> {}
