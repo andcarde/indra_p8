@@ -17,10 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Lector {
 
-    @Autowired
-    private EntityManager em;
-
-    @Column(name = "n_socio")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long nSocio;
@@ -37,29 +33,6 @@ public class Lector {
     @OneToMany(mappedBy = "lector_id")
     private List<Prestamo> prestamos;
 
-    public void devolver(long id, Date fechaAct) {
-        Copia copia = service.getCopia(id).orElse(null);
-        Prestamo prestamo = service.getPrestamo(id).orElse(null);
-        if (copia != null) {
-            Date fechaDevolucion = prestamo.getFin();
-        }
-    }
-    public void prestar(long id, Date fechaAct) {
-        Copia copia = service.getCopia(id).orElse(null);
-        if (copia != null) {
-            Date fechaActual = new Date();
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(fechaActual);
-            calendar.add(Calendar.DAY_OF_MONTH, 30); // suma 30 días
-            Date fechaDevolucion = calendar.getTime();
-            Prestamo prestamo = new Prestamo();
-            prestamo.setLector(this);
-            prestamo.setCopia(copia);
-            prestamo.setInicio(fechaActual);
-            prestamo.setFin(fechaDevolucion);
-        }
-    }
-    private void multar(int dias) {
-
-    }
+    @OneToOne(mappedBy = "lector", cascade = CascadeType.ALL)
+    private Multa multa;
 }

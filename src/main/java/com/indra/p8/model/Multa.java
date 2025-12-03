@@ -12,7 +12,6 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@IdClass(MultaId.class)
 public class Multa {
 
     @Column(name = "lector_id")
