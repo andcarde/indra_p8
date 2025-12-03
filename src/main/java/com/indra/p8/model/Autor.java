@@ -14,18 +14,21 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Autor {
+
     @Column
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column
     private String nombre;
+
     @Column
     private String nacionalidad;
+
     @Column
     private Date fechaNac;
 
     @OneToMany(mappedBy = "autor")
     private List<Libro> libros;
-
 }

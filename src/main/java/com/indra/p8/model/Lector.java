@@ -18,10 +18,13 @@ public class Lector {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long nSocio;
+
     @Column
     private String nombre;
+
     @Column
     private String telefono;
+
     @Column
     private String direccion;
 

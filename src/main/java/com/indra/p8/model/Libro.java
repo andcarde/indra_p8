@@ -18,10 +18,13 @@ public class Libro {
 
     @Column
     private String titulo;
+
     @Column
     private String tipo;
+
     @Column
     private String editorial;
+
     @Column
     private int anyo;
 

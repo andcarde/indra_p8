@@ -1,9 +1,6 @@
 package com.indra.p8.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,13 +12,21 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@IdClass(MultaId.class)
 public class Multa {
 
-    @Column
+    @Column(name = "lector_id")
+    @Id
+    long idLector;
+
+    @Id
+    @Column(name = "f_inicio")
     Date fInicio;
-    @Column
+
+    @Column(name = "f_fin")
     Date fFin;
 
-    @OneToOne(mappedBy = "")
+    @OneToOne
+    @JoinColumn(name = "id_lector", nullable = false, insertable = false, updatable = false)
     Lector lector;
 }
