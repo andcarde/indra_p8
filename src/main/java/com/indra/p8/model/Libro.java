@@ -34,6 +34,6 @@ public class Libro {
     @JoinColumn(name = "id_autor", nullable = false)
     private Autor autor;
 
-    @OneToMany(mappedBy = "id_libro")
+    @OneToMany(mappedBy = "libro")
     private List<Copia> copias;
 }

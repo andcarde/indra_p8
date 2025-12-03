@@ -19,7 +19,7 @@ public class Prestamo {
     @Id
     long idCopia;
 
-    @Column(name = "lector")
+    @Column(name = "lector_id")
     @Id
     long idLector;
 
@@ -35,6 +35,6 @@ public class Prestamo {
     Copia copia;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "n_socio")
+    @JoinColumn(name = "lector_id")
     Lector lector;
 }
