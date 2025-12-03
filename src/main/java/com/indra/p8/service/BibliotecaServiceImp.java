@@ -1,6 +1,7 @@
 package com.indra.p8.service;
 
 
+import com.indra.p8.DTOs.CrearAutorDTO;
 import com.indra.p8.DTOs.CrearLibroDTO;
 import com.indra.p8.model.*;
 import com.indra.p8.repository.*;
@@ -30,7 +31,11 @@ public class BibliotecaServiceImp implements BibliotecaService {
 
 
     @Override
-    public Autor crearAutor(Autor autor) {
+    public Autor crearAutor(CrearAutorDTO dto) {
+        Autor autor = new Autor();
+        autor.setNombre(dto.getNombre());
+        autor.setNacionalidad(dto.getNacionalidad());
+        autor.setFechaNac(dto.getFechaNac());
         autorRepository.save(autor);
         return autor;
     }

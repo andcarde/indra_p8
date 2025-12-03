@@ -1,6 +1,7 @@
 package com.indra.p8.controller;
 
 
+import com.indra.p8.DTOs.CrearAutorDTO;
 import com.indra.p8.DTOs.CrearLibroDTO;
 import com.indra.p8.model.*;
 import com.indra.p8.service.BibliotecaService;
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController // viene en la dependencia WEB (spring-boot-starter-web) del pom
@@ -29,8 +29,8 @@ public class BibliotecaController {
     }
 
     @PostMapping("/crearAutor")
-    public void crearAutor(@RequestBody Autor autor) {
-        service.crearAutor(autor);
+    public void crearAutor(@RequestBody CrearAutorDTO dto) {
+        service.crearAutor(dto);
     }
 
     @PostMapping("/crearlibro")
@@ -38,8 +38,8 @@ public class BibliotecaController {
         service.crearLibro(dto);
     }
 
-    @PostMapping("/crearcopia")
-    public List<Copia> crearCopia(@RequestBody Long idLibro, @RequestBody int ncopias) {
+    @PostMapping("/crearcopia{idLibro}")
+    public List<Copia> crearCopia(@PathVariable Long idLibro, @RequestParam int ncopias) {
         List<Copia> copias;
         copias = service.crearCopia(idLibro, ncopias);
         return copias;

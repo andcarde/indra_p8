@@ -1,5 +1,6 @@
 package com.indra.p8.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,5 +36,6 @@ public class Libro {
     private Autor autor;
 
     @OneToMany(mappedBy = "libro")
+    @JsonIgnore
     private List<Copia> copias;
 }

@@ -1,5 +1,6 @@
 package com.indra.p8.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,5 +30,6 @@ public class Autor {
     private LocalDate fechaNac;
 
     @OneToMany(mappedBy = "autor")
+    @JsonIgnore
     private List<Libro> libros;
 }
