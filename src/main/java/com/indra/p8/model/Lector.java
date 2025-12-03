@@ -16,8 +16,7 @@ public class Lector {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "n_socio")
-    private Long nSocio;
+    private Long id;
 
     @Column
     private String nombre;

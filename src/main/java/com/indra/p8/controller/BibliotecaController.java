@@ -14,6 +14,11 @@ import java.util.List;
 @RequestMapping("/biblioteca")
 public class BibliotecaController {
 
+    @GetMapping("/biblioteca")
+    public String getBibliotecaPage() {
+        return "biblioteca";
+    }
+
     @Autowired
     private BibliotecaService service;
 

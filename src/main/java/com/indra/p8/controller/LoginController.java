@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import jakarta.servlet.http.HttpSession;
 
@@ -18,7 +19,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String mostrarFormularioLogin() {
-        return "login";
+        return "login2";
     }
 
     /*
@@ -46,5 +47,10 @@ public class LoginController {
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/login?logout";
+    }
+
+    @PostMapping("/crearBibliotecario")
+    public void crearAutor(@RequestBody String username, @RequestBody String password) {
+        loginService.crearBibliotecario(username, password);
     }
 }

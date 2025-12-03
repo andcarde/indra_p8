@@ -28,4 +28,18 @@ public class LoginServiceImp implements LoginService {
         String hash = bibliotecario.getPassword();
         return encoder.matches(password, hash);
     }
+
+    @Override
+    public boolean crearBibliotecario(String username, String password) {
+        try {
+            String hash = encoder.encode(password);
+            Bibliotecario bibliotecario = new Bibliotecario();
+            bibliotecario.setUsername(username);
+            bibliotecario.setPassword(hash);
+            bibliotecarioRepository.save(bibliotecario);
+            return true;
+        } catch (Exception ignored) {}
+        return false;
+    }
+
 }

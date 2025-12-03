@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Biblioteca Indra S.A. – Panel de Gestión</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background: #eef1f5;
+        }
+
+        header {
+            background: #004fa3;
+            color: white;
+            padding: 18px 35px;
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            display: flex;
+            gap: 25px;
+            padding: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 12px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 20px;
+            color: #004fa3;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin-top: 15px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: 1px solid #aaa;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background: #0072d0;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #005ca6;
+        }
+
+        #output {
+            background: #ffffff;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 100px;
+            box-shadow: 0px 5px 12px rgba(0,0,0,0.1);
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>Biblioteca Indra S.A. – Panel de Gestión</header>
+
+
+<div class="container">
+
+    <!-- === CREAR AUTOR === -->
+    <div class="card">
+        <h2>Crear Autor</h2>
+        <label>Nombre</label>
+        <input type="text" id="autorNombre">
+        <label>Nacionalidad</label>
+        <input type="text" id="autorNacionalidad">
+
+        <button onclick="crearAutor()">Crear Autor</button>
+    </div>
+
+    <!-- === CREAR LIBRO === -->
+    <div class="card">
+        <h2>Crear Libro</h2>
+        <label>Título</label>
+        <input type="text" id="libroTitulo">
+        <label>ID Autor</label>
+        <input type="number" id="libroAutorId">
+
+        <button onclick="crearLibro()">Crear Libro</button>
+    </div>
+
+    <!-- === CREAR COPIAS === -->
+    <div class="card">
+        <h2>Crear Copias</h2>
+        <label>ID Libro</label>
+        <input type="number" id="copiaLibroId">
+        <label>Número de copias</label>
+        <input type="number" id="cantidadCopias">
+
+        <button onclick="crearCopias()">Crear Copias</button>
+    </div>
+</div>
+
+
+<div class="container">
+
+    <!-- === PRESTAR === -->
+    <div class="card">
+        <h2>Prestar</h2>
+        <label>ID Lector</label>
+        <input type="number" id="prestamoLectorId">
+        <label>ID Copia</label>
+        <input type="number" id="prestamoCopiaId">
+
+        <button onclick="prestar()">Prestar Libro</button>
+    </div>
+
+    <!-- === DEVOLVER === -->
+    <div class="card">
+        <h2>Devolver Préstamo</h2>
+        <label>ID Préstamo</label>
+        <input type="number" id="idPrestamo">
+
+        <button onclick="devolver()">Devolver</button>
+    </div>
+
+    <!-- === REPARAR / ELIMINAR COPIA === -->
+    <div class="card">
+        <h2>Gestión de Copias</h2>
+        <label>ID Copia</label>
+        <input type="number" id="idCopiaGestion">
+
+        <button onclick="repararCopia()">Reparar Copia</button>
+        <button onclick="eliminarCopia()">Eliminar Copia</button>
+    </div>
+</div>
+
+
+<div class="container">
+
+    <!-- === GET LIBROS === -->
+    <div class="card">
+        <h2>Consultar Libros</h2>
+        <button onclick="getLibros()">Obtener libros</button>
+    </div>
+
+    <!-- === GET PRESTAMOS LECTOR === -->
+    <div class="card">
+        <h2>Préstamos de Lector</h2>
+        <label>ID Lector</label>
+        <input type="number" id="idLectorPrestamos">
+
+        <button onclick="getPrestamosLector()">Consultar</button>
+    </div>
+</div>
+
+
+<!-- === SALIDA DE RESPUESTAS === -->
+<div id="output">Aquí aparecerán las respuestas del servidor...</div>
+
+
+<script>
+
+    // ======= CREAR AUTOR =======
+    function crearAutor() {
+        $.ajax({
+            url: "/api/autor",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                nombre: $("#autorNombre").val(),
+                nacionalidad: $("#autorNacionalidad").val()
+            }),
+            success: r => $("#output").text(JSON.stringify(r, null, 2))
+        });
+    }
+
+    // ======= CREAR LIBRO =======
+    function crearLibro() {
+        $.ajax({
+            url: "/api/libro",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                titulo: $("#libroTitulo").val(),
+                autorId: $("#libroAutorId").val()
+            }),
+            success: r => $("#output").text(JSON.stringify(r, null, 2))
+        });
+    }
+
+    // ======= CREAR COPIAS =======
+    function crearCopias() {
+        $.ajax({
+            url: "/api/copia/" + $("#copiaLibroId").val() + "/" + $("#cantidadCopias").val(),
+            type: "POST",
+            success: r => $("#output").text(JSON.stringify(r, null, 2))
+        });
+    }
+
+    // ======= PRESTAR =======
+    function prestar() {
+        $.ajax({
+            url: "/api/prestamo/prestar",
+            type: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify({
+                idLector: $("#prestamoLectorId").val(),
+                idCopia: $("#prestamoCopiaId").val()
+            }),
+            success: r => $("#output").text(JSON.stringify(r, null, 2))
+        });
+    }
+
+    // ======= DEVOLVER =======
+    function devolver() {
+        $.ajax({
+            url: "/api/prestamo/devolver/" + $("#idPrestamo").val(),
+            type: "PUT",
+            success: r => $("#output").text(JSON.stringify(r, null, 2))
+        });
+    }
+
+    // ======= REPARAR COPIA =======
+    function repararCopia() {
+        $.ajax({
+            url: "/api/copia/reparar/" + $("#idCopiaGestion").val(),
+            type: "PUT",
+            success: r => $("#output").text(JSON.stringify(r, null, 2))
+        });
+    }
+
+    // ======= ELIMINAR COPIA =======
+    function eliminarCopia() {
+        $.ajax({
+            url: "/api/copia/" + $("#idCopiaGestion").val(),
+            type: "DELETE",
+            success: r => $("#output").text(JSON.stringify(r, null, 2))
+        });
+    }
+
+    // ======= GET LIBROS =======
+    function getLibros() {
+        $.get("/api/libro", r => {
+            $("#output").text(JSON.stringify(r, null, 2));
+        });
+    }
+
+    // ======= GET PRESTAMOS DE LECTOR =======
+    function getPrestamosLector() {
+        $.get("/api/prestamo/lector/" + $("#idLectorPrestamos").val(), r => {
+            $("#output").text(JSON.stringify(r, null, 2));
+        });
+    }
+
+</script>
+
+</body>
+</html>
