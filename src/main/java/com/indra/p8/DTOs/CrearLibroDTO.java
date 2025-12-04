@@ -1,5 +1,6 @@
 package com.indra.p8.DTOs;
 
+import com.indra.p8.model.Copia;
 import com.indra.p8.model.TipoLibro;
 import lombok.Data;
 

@@ -2,33 +2,95 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/biblioteca.css">
-    <link rel="stylesheet" th:href="@{/css/biblioteca.css}">
     <title>Biblioteca Indra S.A. – Panel de Gestión</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script th:src="@{/js/message.js}"></script>
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/biblioteca.css">
+    <link rel="stylesheet" href="/css/libro.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- JS propio -->
+
+    <script src="/js/biblioteca.js" defer></script>
+    <script src="/js/crear-autor.js" defer></script>
+    <script src="/js/prestar.js" defer></script>
+    <script src="/js/message.js" defer></script>
+    <script src="/js/toolbar.js" defer></script>
+</head>
 <body>
-    <header>Biblioteca Indra S.A. – Panel de Gestión</header>
-<div class="container">
-    <!-- === CREAR AUTOR === -->
-    <div class="card">
-        <h2>Crear Autor</h2>
+
+<header>
+    <span class="logo-circle">📚</span>
+    <span class="titulo">Biblioteca</span>
+</header>
+
+<!-- Barra superior de acciones -->
+<div class="toolbar">
+    <!-- showPrestarModal() -->
+    <button id="btnPrestar">Prestar</button>
+    <button id="btnMostrarPrestamos">Mostrar préstamos</button>
+    <button id="btnDevolverPrestamo">Devolver préstamo</button>
+    <!-- showCrearLibroModal() -->
+    <button id="btnCrearAutor" class="secondary">Crear Autor</button>
+    <button id="btnCrearLibro" class="secondary">Crear Libro</button>
+</div>
+
+<!-- Layout principal: solo lista de libros -->
+<div class="main-layout">
+    <div class="col-libros">
+        <h2>Libros disponibles</h2>
+        <div id="listaLibros" class="lista-libros">
+            <!-- aquí se cargan dinámicamente las tarjetas de libros -->
+        </div>
+    </div>
+</div>
+
+<!-- Log/debug de respuestas -->
+<div id="output">Log de operaciones...</div>
+
+<footer>
+    INDRA CONFIDENCIAL – todos los derechos reservados
+</footer>
+
+<!-- MODAL: Devolver préstamo -->
+<div id="modalDevolver" class="modal-fondo">
+    <div class="modal">
+        <h4>Devolver préstamo</h4>
+        <label>ID Préstamo</label>
+        <input type="number" id="inpIdPrestamo">
+        <div class="botones">
+            <button class="btn-cancelar" onclick="cerrarModal('#modalDevolver')">Cancelar</button>
+            <button class="btn-aceptar" onclick="devolverPrestamoDesdeModal()">Aceptar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: Crear autor -->
+<div id="modalAutor" class="modal-fondo">
+    <div class="modal">
+        <h4>Crear Autor</h4>
         <label>Nombre</label>
         <input type="text" id="autorNombre">
         <label>Nacionalidad</label>
         <input type="text" id="autorNacionalidad">
-        <label> Fecha Nacimiento</label>
-        <input type="datetime-local" id="fechaNac">
-        <button onclick="crearAutor()">Crear Autor</button>
+        <label>Fecha nacimiento</label>
+        <input type="date" id="fechaNac">
+        <div class="botones">
+            <button class="btn-cancelar" onclick="cerrarModal('#modalAutor')">Cancelar</button>
+            <button class="btn-aceptar" onclick="crearAutor()">Crear</button>
+        </div>
     </div>
+</div>
 
-    <!-- === CREAR LIBRO === -->
-    <div class="card">
-        <h2>Crear Libro</h2>
+<!-- MODAL: Crear libro -->
+<div id="modalLibro" class="modal-fondo">
+    <div class="modal">
+        <h4>Crear Libro</h4>
         <label>Título</label>
-        <input type="text" id="libroTitulo">
+        <input type="text" id="libroTituloInput">
         <label>Tipo</label>
         <select id="libroTipo">
             <option value="NOVELA">NOVELA</option>
@@ -39,201 +101,14 @@
         <label>Editorial</label>
         <input type="text" id="libroEditorial">
         <label>Año</label>
-        <input type="number" id="libroAnyo" min="0" value="2025">
+        <input type="number" id="libroAnyo" value="2025" min="0">
         <label>ID Autor</label>
         <input type="number" id="libroAutorId">
-        <button onclick="crearLibro()">Crear Libro</button>
-    </div>
-
-    <!-- === CREAR COPIAS === -->
-    <div class="card">
-        <h2>Crear Copias</h2>
-        <label>ID Libro</label>
-        <input type="number" id="copiaLibroId">
-        <label>Número de copias</label>
-        <input type="number" id="cantidadCopias">
-        <button onclick="crearCopias()">Crear Copias</button>
+        <div class="botones">
+            <button class="btn-cancelar" onclick="cerrarModal('#modalLibro')">Cancelar</button>
+            <button class="btn-aceptar" onclick="crearLibro()">Crear</button>
+        </div>
     </div>
 </div>
-
-
-<div class="container">
-
-    <!-- === PRESTAR === -->
-    <div class="card">
-        <h2>Prestar</h2>
-        <label>ID Lector</label>
-        <input type="number" id="prestamoLectorId">
-        <label>ID Copia</label>
-        <input type="number" id="prestamoCopiaId">
-        <button onclick="prestar()">Prestar Libro</button>
-    </div>
-
-    <!-- === DEVOLVER === -->
-    <div class="card">
-        <h2>Devolver Préstamo</h2>
-        <label>ID Préstamo</label>
-        <input type="number" id="idPrestamo">
-
-        <button onclick="devolver()">Devolver</button>
-    </div>
-
-    <!-- === REPARAR / ELIMINAR COPIA === -->
-    <div class="card">
-        <h2>Gestión de Copias</h2>
-        <label>ID Copia</label>
-        <input type="number" id="idCopiaGestion">
-        <button onclick="repararCopia()">Reparar Copia</button>
-        <button onclick="eliminarCopia()">Eliminar Copia</button>
-    </div>
-</div>
-
-
-<div class="container">
-
-    <!-- === GET LIBROS === -->
-    <div class="card">
-        <h2>Consultar Libros</h2>
-        <button onclick="getLibros()">Obtener libros</button>
-    </div>
-
-    <!-- === GET PRESTAMOS LECTOR === -->
-    <div class="card">
-        <h2>Préstamos de Lector</h2>
-        <label>ID Lector</label>
-        <input type="number" id="idLectorPrestamos">
-
-        <button onclick="getPrestamosLector()">Consultar</button>
-    </div>
-</div>
-
-
-<!-- === SALIDA DE RESPUESTAS === -->
-<div id="output">Aquí aparecerán las respuestas del servidor...</div>
-
-
-<script>
-
-    // ======= CREAR AUTOR =======
-    function crearAutor() {
-        $.ajax({
-            url: "/biblioteca/crearAutor",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify({
-                nombre: $("#autorNombre").val(),
-                nacionalidad: $("#autorNacionalidad").val(),
-                fechaNac: $("#fechaNac").val()
-            }),
-            success: r => $("#output").text(JSON.stringify(r, null, 2))
-        });
-    }
-
-    // ======= CREAR LIBRO =======
-    function crearLibro() {
-        $.ajax({
-            url: "/biblioteca/crearlibro",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify({
-                titulo: $("#libroTitulo").val(),
-                tipo: $("#libroTipo").val(),
-                editorial: $("#libroEditorial").val(),
-                anyo: parseInt($("#libroAnyo").val(),10),
-                idAutor: parseInt($("#libroAutorId").val(),10)
-            }),
-            success: r => $("#output").text(JSON.stringify(r, null, 2))
-        });
-    }
-
-    // ======= CREAR COPIAS =======
-    function crearCopias() {
-        const idLibro = $("#copiaLibroId").val();
-        const ncopias = $("#cantidadCopias").val();
-
-        $.ajax({
-            url: "/biblioteca/crearcopia" + encodeURIComponent(idLibro),
-            type: "POST",
-            data: { ncopias: ncopias }, // va como @RequestParam, no en la ruta
-            success: r => $("#output").text(JSON.stringify(r, null, 2)),
-            error: e => $("#output").text("Error al crear copias")
-        });
-    }
-
-    // ======= PRESTAR =======
-    function prestar() {
-        const idLector = $("#prestamoLectorId").val();
-        const idCopia  = $("#prestamoCopiaId").val();
-
-        $.ajax({
-            url: "/biblioteca/prestar/" +
-                encodeURIComponent(idLector) + "/" +
-                encodeURIComponent(idCopia),
-            type: "PUT",
-            // no hace falta body JSON, los datos van en la URL
-            success: r => $("#output").text(JSON.stringify(r, null, 2)),
-            error: e => {
-                $("#output").text("Error al prestar: " +
-                    (e.responseText || e.status + " " + e.statusText));
-            }
-        });
-    }
-
-    // ======= DEVOLVER =======
-    function devolver() {
-        $.ajax({
-            url: "/biblioteca/devolucion" + $("#idPrestamo").val(),
-            type: "PUT",
-            success: r => $("#output").text(JSON.stringify(r, null, 2))
-        });
-    }
-
-    // ======= GET LIBROS =======
-    function getLibros() {
-        $.get("/biblioteca/libros", r => {
-            consultarLibros(r);
-            $("#output").text("Mostrando " + r.length + " libros en el modal.");
-        });
-    }
-
-    // ======= GET PRESTAMOS DE LECTOR =======
-    function getPrestamosLector() {
-        $.get("/biblioteca/prestamosLector/" + $("#idLectorPrestamos").val(), r => {
-            $("#output").text(JSON.stringify(r, null, 2));
-        });
-    }
-
-    function consultarLibros(lista) {
-        let html = `
-            <table border="1" width="100%" cellpadding="7" style="border-collapse: collapse;">
-                <tr style="background:#004fa3;color:white;">
-                    <th>Título</th>
-                    <th>Tipo</th>
-                    <th>Editorial</th>
-                    <th>ID Autor</th>
-                    <th>Año</th>
-                    <th>Nº Copias</th>
-                </tr>
-        `;
-
-        lista.forEach(l => {
-            html += `
-                <tr>
-                    <td>${l.titulo ?? ""}</td>
-                    <td>${l.tipo ?? ""}</td>
-                    <td>${l.editorial ?? ""}</td>
-                    <td>${l.idAutor ?? ""}</td>
-                    <td>${l.anyo ?? ""}</td>
-                    <td>${l.numCopias ?? ""}</td>
-                </tr>
-            `;
-        });
-
-        html += "</table>";
-
-        $("#modalTabla").html(html);
-        $("#modalFondo").show();
-    }
-</script>
 </body>
 </html>

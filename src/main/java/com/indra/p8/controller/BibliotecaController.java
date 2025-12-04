@@ -15,11 +15,6 @@ import java.util.List;
 @RequestMapping("/biblioteca")
 public class BibliotecaController {
 
-    @GetMapping("/biblioteca")
-    public String getBibliotecaPage() {
-        return "biblioteca";
-    }
-
     @Autowired
     private BibliotecaService service;
 
@@ -60,6 +55,41 @@ public class BibliotecaController {
                                           @PathVariable Long idCopia) {
         String responseText = service.prestar(idLector, idCopia);
         return ResponseEntity.ok(responseText);
+    }
+
+    @GetMapping("/getLibro{idLibro}")
+    public ResponseEntity<Libro> getLibro(@PathVariable Long idLibro){
+        Libro libro = service.getLibroById(idLibro);
+        return ResponseEntity.ok(libro);
+    }
+    /*
+
+    @GetMapping("/getLibro/{idLibro}")
+    public String mostrarLibro(@PathVariable Long idLibro, Model model) {
+        Libro libro = service.getLibroById(idLibro);
+        model.addAttribute("libro", libro);
+        return "libro"; // Thymeleaf buscará libro.html en /templates
+    }
+     */
+
+    @GetMapping("/getCopias{idLibro}")
+    public ResponseEntity<List<Copia>> getCopiasByLibro(@PathVariable Long idLibro){
+        return ResponseEntity.ok(service.getCopiasByLibroId(idLibro));
+    }
+
+    @GetMapping("/getCopia{idCopia}")
+    public ResponseEntity<Copia> getCopia(@PathVariable Long idCopia){
+        return ResponseEntity.ok(service.getCopiaById(idCopia));
+    }
+
+    @PutMapping("/copia/{idCopia}/reparar")
+    public void repararCopia(@PathVariable Long idCopia){
+        service.repararCopia(idCopia);
+    }
+
+    @DeleteMapping("/copia/{idCopia}/baja")
+    public void bajaCopia(@PathVariable Long idCopia){
+        service.deleteCopia(idCopia);
     }
 
 }

@@ -17,4 +17,7 @@ public interface BibliotecaService {
     boolean repararCopia(Long idCopia);
     boolean deleteCopia(Long idCopia);
     List<Prestamo> getPrestamosLector(Long idLector);
+    Libro getLibroById (Long idLibro);
+    List<Copia> getCopiasByLibroId(Long idLibro);
+    Copia getCopiaById(Long idCopia);
 }

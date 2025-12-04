@@ -60,4 +60,15 @@ public class LoginController {
         // busca templates/biblioteca.html
         return "biblioteca";
     }
+
+    @GetMapping("/libro")
+
+    public String paginaLibro() {
+        return "libro";
+    }
+    @GetMapping("/copia")
+
+    public String paginaCopia() {
+        return "copia";
+    }
 }

@@ -17,7 +17,7 @@ import java.util.Optional;
 public class BibliotecaServiceImp implements BibliotecaService {
 
     @Autowired
-    AutorRepository autorRepository;
+    private AutorRepository autorRepository;
     @Autowired
     private CopiaRepository copiaRepository;
     @Autowired
@@ -32,6 +32,9 @@ public class BibliotecaServiceImp implements BibliotecaService {
 
     @Override
     public Autor crearAutor(CrearAutorDTO dto) {
+        if(autorRepository.existsByNombre(dto.getNombre())){
+            throw new RuntimeException("El autor ya esta registrado");
+        }
         Autor autor = new Autor();
         autor.setNombre(dto.getNombre());
         autor.setNacionalidad(dto.getNacionalidad());
@@ -45,6 +48,11 @@ public class BibliotecaServiceImp implements BibliotecaService {
         Long idAutor=dto.getIdAutor();
         Autor autor = autorRepository.findById(idAutor)
                 .orElseThrow(() -> new RuntimeException("Autor no encontrado"));
+
+        if(libroRepository.existsByTituloAndAutor(dto.getTitulo(),autor)){
+            throw new RuntimeException("El libro ya esta registrado");
+        }
+
         Libro libro = new Libro();
         libro.setTitulo(dto.getTitulo());
         libro.setTipo(dto.getTipo());
@@ -112,6 +120,12 @@ public class BibliotecaServiceImp implements BibliotecaService {
         if (copia.getEstado() != EstadoCopia.BIBLIOTECA) {
             return "No se puede prestar: copia no disponible.";
         }
+        List<Prestamo> prestamos = getPrestamosLector(idLector);
+        List<Prestamo> prestamosActivos = prestamos.stream().filter(p -> p.getFin()==null).toList();
+
+        if (prestamosActivos.size() >= 3) {
+            return "Demasiados prestamos activos.";
+        }
 
         // Crear préstamo
         Prestamo prestamo = new Prestamo();
@@ -119,6 +133,8 @@ public class BibliotecaServiceImp implements BibliotecaService {
         prestamo.setLector(lector);
         prestamo.setCopia(copia);
         prestamoRepository.save(prestamo);
+        copia.setEstado(EstadoCopia.PRESTADO);
+        copiaRepository.save(copia);
 
         copia.setEstado(EstadoCopia.PRESTADO);
         copiaRepository.save(copia);
@@ -176,5 +192,32 @@ public class BibliotecaServiceImp implements BibliotecaService {
             }
         } catch (Exception ignored) {}
         return false;
+    }
+
+    /* Se utilizará la llamada al servidor
+    * /getlibro/{idLibro} mediante GET.
+    * Si existe se devolvera un objeto Libro { titulo:String,
+    * nombreAutor:String, copias:List<Copia> }
+    * Copia { idCopia:Long, estado:String }.
+    * El estado será "prestado", "retraso", "biblioteca", "reparacion".
+    * En caso de que no exista se devuelve null.
+    */
+    @Override
+    public Libro getLibroById(Long idLibro){
+        Libro libro = libroRepository.findById(idLibro).
+                orElseThrow(() -> new RuntimeException("Libro no encontrado"));
+        return libro;
+    }
+
+    @Override
+    public List<Copia> getCopiasByLibroId(Long idLibro){
+        Libro libro = libroRepository.findById(idLibro).
+                orElseThrow(() -> new RuntimeException("Libro no encontrado"));
+        return copiaRepository.findByLibro(libro);
+    }
+    @Override
+    public Copia getCopiaById(Long idCopia){
+        Copia copia= copiaRepository.findById(idCopia).orElseThrow(()-> new RuntimeException("Copia no encontrada"));
+        return copia;
     }
 }
