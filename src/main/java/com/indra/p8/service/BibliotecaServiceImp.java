@@ -136,7 +136,8 @@ public class BibliotecaServiceImp implements BibliotecaService {
         if(!lectorRepository.existsById(idLector)){
             throw new RuntimeException();
         }
-        return prestamoRepository.findByLectorId(idLector);
+        Optional<Lector> lector = lectorRepository.findById(idLector);
+        return prestamoRepository.findByLector(lector);
 
     }
 

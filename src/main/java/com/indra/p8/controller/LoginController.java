@@ -9,8 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
 
-@RestController
-@RequestMapping("/login")
+@Controller
 public class LoginController {
 
     @Autowired
@@ -18,7 +17,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String mostrarFormularioLogin() {
-        return "login2";
+        return "login";
     }
 
     /*
@@ -30,16 +29,18 @@ public class LoginController {
                              Model model,
                              HttpSession session) {
 
+        System.out.println("POST /login: username=" + username);
+
         boolean ok = loginService.login(username, password);
+        System.out.println("Resultado loginService.login = " + ok);
 
         if (!ok) {
             model.addAttribute("error", "Usuario o contraseña incorrectos");
-            return "login"; // volvemos al formulario con mensaje de error
+            return "login";
         }
 
         session.setAttribute("usuarioLogueado", username);
-
-        return "redirect:/admin";
+        return "redirect:/biblioteca";
     }
 
     @GetMapping("/logout")
@@ -52,5 +53,11 @@ public class LoginController {
     public ResponseEntity<String> crearBibliotecario(@RequestParam String username, @RequestParam String password) {
         loginService.crearBibliotecario(username, password);
         return ResponseEntity.ok("Bibliotecario creado");
+    }
+
+    @GetMapping("/biblioteca")
+    public String getBibliotecaPage() {
+        // busca templates/biblioteca.html
+        return "biblioteca";
     }
 }
