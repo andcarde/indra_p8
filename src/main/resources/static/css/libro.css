@@ -1,0 +1,289 @@
+/* ========================================================================== */
+/* GLOBAL RESET & BASIC TYPOGRAPHY                                            */
+/* ========================================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    background: #f0f4ff;
+    color: #001a33;
+    line-height: 1.5;
+}
+
+/* Colores corporativos */
+:root {
+    --azul-oscuro: #003366;
+    --azul-medio: #0052cc;
+    --azul-claro: #e0ecff;
+    --azul-hover: #003f99;
+    --azul-borde: #c2d4ff;
+    --texto: #001a33;
+    --sombra-base: rgba(0, 51, 102, 0.12);
+}
+
+/* ========================================================================== */
+/* CONTENEDOR PRINCIPAL DEL LIBRO                                             */
+/* ========================================================================== */
+
+.book-container {
+    max-width: 1100px;
+    padding: 32px 24px;
+    margin: 0 auto;
+}
+
+/* TÍTULO DEL LIBRO */
+.book-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--azul-oscuro);
+    letter-spacing: 0.5px;
+}
+
+/* ========================================================================== */
+/* TARJETA DE INFORMACIÓN GENERAL DEL LIBRO                                   */
+/* ========================================================================== */
+
+.book-card {
+    background: linear-gradient(145deg, #e6f0ff, #ffffff);
+    padding: 24px 28px;
+    border-radius: 10px;
+    border: 1px solid var(--azul-borde);
+    box-shadow: 0 3px 12px var(--sombra-base);
+    margin-bottom: 32px;
+}
+
+.book-card h2 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 24px;
+    color: var(--azul-oscuro);
+}
+
+.book-card p {
+    font-size: 16px;
+    color: var(--texto);
+    margin: 6px 0;
+}
+
+/* ========================================================================== */
+/* TABLA DE COPIAS                                                             */
+/* ========================================================================== */
+
+.copias-card {
+    background: #ffffff;
+    padding: 24px 28px;
+    border-radius: 10px;
+    border: 1px solid var(--azul-borde);
+    box-shadow: 0 3px 12px var(--sombra-base);
+}
+
+.copias-card h3 {
+    margin-top: 0;
+    margin-bottom: 18px;
+    font-size: 22px;
+    color: var(--azul-oscuro);
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+table.copias-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+.copias-table thead {
+    background: var(--azul-medio);
+    color: #ffffff;
+}
+
+.copias-table th,
+.copias-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--azul-borde);
+}
+
+.copias-table tr:hover td {
+    background: #f5f9ff;
+}
+
+/* ========================================================================== */
+/* BOTONES DE ACCIONES                                                         */
+/* ========================================================================== */
+
+.action-btn {
+    padding: 7px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.action-btn:hover {
+    transform: translateY(-1px);
+}
+
+/* Estados específicos */
+.btn-devolver {
+    background: #2e8b57;
+    color: white;
+}
+
+.btn-ver {
+    background: #0073e6;
+    color: white;
+}
+
+.btn-baja {
+    background: #c62828;
+    color: white;
+}
+
+.btn-reparacion {
+    background: #fbc02d;
+    color: #003366;
+    border: 1px solid #e0b200;
+}
+
+.btn-devolver:hover     { background: #256f46; }
+.btn-ver:hover          { background: #005bb8; }
+.btn-baja:hover         { background: #9f1f1f; }
+.btn-reparacion:hover   { background: #e0a800; }
+
+/* Texto para estados */
+.estado-reparacion {
+    color: #6b7c93;
+    font-style: italic;
+}
+
+/* ========================================================================== */
+/* ALERTAS Y MENSAJES                                                          */
+/* ========================================================================== */
+
+.alert {
+    margin: 40px auto;
+    max-width: 600px;
+    padding: 20px 24px;
+    background: #ffe0e0;
+    border-left: 5px solid #d32f2f;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #6e0000;
+}
+
+/* ========================================================================== */
+/* MODALES (COMPATIBLES CON EL JS EXISTENTE)                                   */
+/* ========================================================================== */
+
+.modal-fondo {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 34, 85, 0.45);
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.modal {
+    background: #ffffff;
+    padding: 24px 26px;
+    border-radius: 8px;
+    min-width: 300px;
+    max-width: 420px;
+    border: 1px solid var(--azul-borde);
+    box-shadow: 0 6px 16px rgba(0, 34, 85, 0.35);
+    animation: modalFade 0.2s ease-out;
+}
+
+@keyframes modalFade {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.modal h4 {
+    margin: 0 0 12px 0;
+    color: var(--azul-oscuro);
+}
+
+.modal label {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--azul-oscuro);
+}
+
+.modal input,
+.modal select {
+    width: 100%;
+    padding: 7px 10px;
+    margin-top: 4px;
+    border-radius: 4px;
+    border: 1px solid var(--azul-borde);
+    background: #f5f9ff;
+}
+
+.modal .botones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal button {
+    padding: 7px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.modal .btn-cancelar {
+    background: #e0ecff;
+    border: 1px solid var(--azul-borde);
+    color: var(--azul-oscuro);
+}
+
+.modal .btn-aceptar {
+    background: var(--azul-medio);
+    border: 1px solid #0047b3;
+    color: white;
+}
+
+/* ========================================================================== */
+/* RESPONSIVE DESIGN                                                           */
+/* ========================================================================== */
+
+@media (max-width: 760px) {
+    .book-container {
+        padding: 16px;
+    }
+
+    .book-title {
+        font-size: 26px;
+    }
+
+    table.copias-table {
+        font-size: 14px;
+    }
+
+    .action-btn {
+        padding: 5px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal {
+        width: 90%;
+    }
+}

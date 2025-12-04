@@ -30,6 +30,16 @@ function cargarCopia(idCopia) {
             $("#idCopia").text(copia.id);
             $("#idCopia").data("libro-id", copia.libro.id);
             $("#estadoCopia").text(copia.estado || "—");
+
+            if (copia.estado === "prestado") {
+                $("#btnBaja").hide();
+                $("#btnReparar").hide();
+                $("#btnDevolver").show();
+            } else {
+                $("#btnBaja").show();
+                $("#btnReparar").show();
+                $("#btnDevolver").hide();
+            }
         },
         error: function () {
             $("body").html(
@@ -65,6 +75,22 @@ function enviarReparacionCopia(idCopia) {
         },
         error: function () {
             alert("Error al enviar a reparación la copia " + idCopia);
+        }
+    });
+}
+
+function devolvere(idCopia) {
+    $.ajax({
+        url: '/devolver/{idCopia}' + encodeURIComponent(idCopia),
+        type: 'POST',
+        success: function () {
+            alert("Copia " + idCopia + " devuelta correctamente.");
+            // window.location.href = "/biblioteca"; // o volver al libro
+            const idLibro = $("#idCopia").data("libro-id");
+            window.location.href = "/libro?id=" + encodeURIComponent(idLibro);
+        },
+        error: function () {
+            alert("Error al devolver la copia " + idCopia);
         }
     });
 }
