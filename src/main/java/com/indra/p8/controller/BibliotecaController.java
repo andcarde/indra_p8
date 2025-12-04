@@ -23,7 +23,7 @@ public class BibliotecaController {
     @Autowired
     private BibliotecaService service;
 
-    @GetMapping("/")
+    @GetMapping("/libros")
     public List<Libro> getLibros() {
         return service.getLibros();
     }
@@ -49,15 +49,17 @@ public class BibliotecaController {
         return ResponseEntity.ok(service.getPrestamosLector(idLector));
     }
 
-    @PutMapping("/devolucion")
-    public ResponseEntity<Boolean> devolver(@RequestBody Long idPrestamo) {
+    @PutMapping("/devolucion{idPrestamo}")
+    public ResponseEntity<Boolean> devolver(@PathVariable Long idPrestamo) {
         boolean isOk = service.devolver(idPrestamo);
         return ResponseEntity.ok(isOk);
     }
 
-    @PutMapping("/prestar/{idLector}{idCopia}")
-    public ResponseEntity<String> prestar(@PathVariable Long idLector, @PathVariable Long idCopia) {
+    @PutMapping("/prestar/{idLector}/{idCopia}")
+    public ResponseEntity<String> prestar(@PathVariable Long idLector,
+                                          @PathVariable Long idCopia) {
         String responseText = service.prestar(idLector, idCopia);
         return ResponseEntity.ok(responseText);
     }
+
 }

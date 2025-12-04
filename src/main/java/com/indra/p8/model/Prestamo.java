@@ -1,5 +1,6 @@
 package com.indra.p8.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,9 +28,11 @@ public class Prestamo {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "lector_id")
+    @JsonIgnore
     private Lector lector;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "copia_id")
+    @JsonIgnore
     private Copia copia;
 }
