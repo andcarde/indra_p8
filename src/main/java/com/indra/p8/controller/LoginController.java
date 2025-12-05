@@ -15,6 +15,11 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
+    @GetMapping("")
+    public String mostrarFormularioLoginInicio() {
+        return "login";
+    }
+
     @GetMapping("/login")
     public String mostrarFormularioLogin() {
         return "login";
@@ -22,7 +27,7 @@ public class LoginController {
 
     /*
     @RequestParam = “coge el parámetro de la petición HTTP con ese nombre”.
-    Se rellena con los campos del formulario (name="...")*/
+    Se rellena con los campos del formulario (name="...")
     @PostMapping("/login")
     public String hacerLogin(@RequestParam String username,
                              @RequestParam String password,
@@ -41,7 +46,7 @@ public class LoginController {
 
         session.setAttribute("usuarioLogueado", username);
         return "redirect:/biblioteca";
-    }
+    }*/
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
@@ -62,7 +67,6 @@ public class LoginController {
     }
 
     @GetMapping("/libro")
-
     public String paginaLibro() {
         return "libro";
     }

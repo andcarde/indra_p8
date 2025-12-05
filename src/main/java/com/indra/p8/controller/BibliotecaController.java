@@ -57,6 +57,12 @@ public class BibliotecaController {
         return ResponseEntity.ok(responseText);
     }
 
+    @PutMapping("/devolver/{idCopia}")
+    public ResponseEntity<Boolean> prestarCopia(@PathVariable Long idCopia){
+        boolean isOk=service.devolverCopia(idCopia);
+        return ResponseEntity.ok(isOk);
+    }
+
     @GetMapping("/getLibro{idLibro}")
     public ResponseEntity<Libro> getLibro(@PathVariable Long idLibro){
         Libro libro = service.getLibroById(idLibro);
