@@ -10,7 +10,7 @@ import java.util.List;
 public interface BibliotecaService {
     Autor crearAutor(CrearAutorDTO dto);
     Libro crearLibro(CrearLibroDTO dto);
-    List<Copia> crearCopia(Long idLibro, int nCopias);
+    String crearCopia(Long idLibro, int nCopias);
     boolean devolver(Long idPrestamo);
     boolean devolverCopia(Long idCopia);
     String prestar(Long idLector, Long idCopia);

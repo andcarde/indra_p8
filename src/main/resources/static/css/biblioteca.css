@@ -1,3 +1,6 @@
+/* =========================================================
+   RESET BÁSICO
+   ========================================================= */
 * {
     box-sizing: border-box;
 }
@@ -5,19 +8,31 @@
 body {
     margin: 0;
     font-family: "Segoe UI", Tahoma, sans-serif;
-    background: #f0f4ff;          /* fondo general azul muy claro */
-    color: #001a33;               /* azul muy oscuro para texto */
+    background: #f0f4ff;
+    color: #001a33;
 }
 
+/* =========================================================
+   HEADER + BOTONES HOME / LOGOUT
+   ========================================================= */
+
 header {
-    background: #003366;          /* azul oscuro */
+    background: #003366;
     padding: 16px 32px;
     font-size: 26px;
     font-weight: 700;
+    color: #ffffff;
+
+    display: flex;
+    justify-content: space-between; /* título a la izquierda, botones a la derecha */
+    align-items: center;            /* TODO a la misma altura vertical */
+}
+
+/* zona izquierda del header: logo + título */
+.header-left {
     display: flex;
     align-items: center;
     gap: 12px;
-    color: #ffffff;
 }
 
 header .logo-circle {
@@ -29,7 +44,7 @@ header .logo-circle {
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    background: #0052cc;          /* azul medio */
+    background: #0052cc;
     color: #ffffff;
 }
 
@@ -37,8 +52,47 @@ header span.titulo {
     margin-left: 8px;
 }
 
+/* zona derecha del header: botones Home / Cerrar sesión */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* el form del logout no debe meter márgenes ni desplazamientos raros */
+.header-right form {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+/* estilo común de los botones de la cabecera */
+.btn-header {
+    display: inline-flex;          /* controla bien la altura y centrado del texto */
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px 14px;
+    height: 32px;                  /* misma altura para los dos botones */
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background: #ffffff;           /* blancos */
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+.btn-header:hover {
+    background: #f5f5f5;
+}
+
+/* =========================================================
+   TOOLBAR SUPERIOR
+   ========================================================= */
+
 .toolbar {
-    background: #e0ecff;          /* barra clara */
+    background: #e0ecff;
     padding: 8px 32px;
     display: flex;
     gap: 8px;
@@ -66,13 +120,16 @@ header span.titulo {
     border-color: #003070;
 }
 
+/* =========================================================
+   LAYOUT PRINCIPAL
+   ========================================================= */
+
 .main-layout {
     display: flex;
     padding: 24px 32px;
     gap: 24px;
 }
 
-/* Columna izquierda: lista de libros */
 .col-libros {
     flex: 1;
 }
@@ -100,6 +157,7 @@ header span.titulo {
     border: 1px solid #c2d4ff;
     color: #003366;
     box-shadow: 0 2px 4px rgba(0, 51, 102, 0.08);
+    transition: box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
 
 .libro-card:hover {
@@ -108,7 +166,10 @@ header span.titulo {
     background: #f5f9ff;
 }
 
-/* Columna derecha: paneles detalle */
+/* =========================================================
+   PANEL DE DETALLE (LIBRO / COPIA)
+   ========================================================= */
+
 .col-detalle {
     flex: 1.2;
     display: flex;
@@ -137,7 +198,7 @@ header span.titulo {
     color: #335b80;
 }
 
-/* Panel detalle libro */
+/* panel con info de libro */
 .panel-libro {
     background: linear-gradient(145deg, #e6f0ff, #ffffff);
 }
@@ -176,7 +237,7 @@ header span.titulo {
     background: #003f99;
 }
 
-/* Panel detalle copia */
+/* panel con info de copia */
 .panel-copia {
     background: linear-gradient(145deg, #e0f0ff, #ffffff);
     color: #003366;
@@ -190,6 +251,7 @@ header span.titulo {
     color: #335b80;
 }
 
+/* acciones sobre la copia */
 .acciones-copia {
     margin-top: 24px;
     display: flex;
@@ -221,227 +283,9 @@ header span.titulo {
     opacity: 0.9;
 }
 
-footer {
-    text-align: center;
-    font-size: 11px;
-    padding: 8px;
-    color: #335b80;
-    border-top: 1px solid #c2d4ff;
-    background: #e6f0ff;
-}
-
-/* Modal genérico simple */
-.modal-fondo {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 34, 85, 0.4);  /* overlay azul translúcido */
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.modal {
-    background: #ffffff;
-    padding: 20px 24px;
-    border-radius: 8px;
-    min-width: 280px;
-    max-width: 360px;
-    box-shadow: 0 6px 14px rgba(0, 34, 85, 0.35);
-    color: #001a33;
-    border: 1px solid #c2d4ff;
-}
-
-.modal h4 {
-    margin-top: 0;
-    color: #003366;
-}
-
-.modal label {
-    display: block;
-    margin-top: 8px;
-    font-size: 14px;
-    color: #003366;
-}
-
-.modal input, .modal select {
-    width: 100%;
-    margin-top: 4px;
-    padding: 6px 8px;
-    border-radius: 4px;
-    border: 1px solid #c2d4ff;
-    background: #f5f9ff;
-    color: #001a33;
-}
-
-.modal .botones {
-    margin-top: 16px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-}
-
-.modal button {
-    border-radius: 4px;
-    border: none;
-    padding: 6px 12px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.modal .btn-cancelar {
-    background: #e0ecff;
-    color: #003366;
-    border: 1px solid #c2d4ff;
-}
-
-.modal .btn-aceptar {
-    background: #0052cc;
-    color: #ffffff;
-    border: 1px solid #0047b3;
-}
-
-#output {
-    margin: 8px 32px 16px 32px;
-    padding: 8px 12px;
-    background: #ffffff;
-    border-radius: 6px;
-    font-size: 12px;
-    white-space: pre-wrap;
-    border: 1px solid #c2d4ff;
-    color: #003366;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: "Segoe UI", Tahoma, sans-serif;
-    background: #f0f4ff;          /* fondo general azul muy claro */
-    color: #001a33;               /* azul muy oscuro para texto */
-}
-
-/* HEADER */
-
-header {
-    background: #003366;          /* azul oscuro */
-    padding: 16px 32px;
-    font-size: 26px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: #ffffff;
-}
-
-header .logo-circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 2px solid #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    background: #0052cc;          /* azul medio */
-    color: #ffffff;
-}
-
-header span.titulo {
-    margin-left: 8px;
-}
-
-/* TOOLBAR */
-
-.toolbar {
-    background: #e0ecff;          /* barra clara */
-    padding: 8px 32px;
-    display: flex;
-    gap: 8px;
-    border-bottom: 1px solid #c2d4ff;
-}
-
-.toolbar button {
-    padding: 8px 16px;
-    border-radius: 4px;
-    border: 1px solid #0047b3;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    color: #ffffff;
-    background: #0052cc;
-}
-
-.toolbar button.secondary {
-    background: #0073e6;
-    border-color: #0060c1;
-}
-
-.toolbar button:hover {
-    background: #003f99;
-    border-color: #003070;
-}
-
-/* CONTENIDO PRINCIPAL */
-
-.main-layout {
-    display: flex;
-    padding: 24px 32px;
-    gap: 24px;
-}
-
-.col-libros {
-    flex: 1;
-}
-
-.col-libros h2 {
-    margin-top: 0;
-    margin-bottom: 16px;
-    font-size: 24px;
-    color: #003366;
-}
-
-.lista-libros {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-/* TARJETA DE LIBRO */
-
-.libro-card {
-    background: #ffffff;
-    padding: 14px 18px;
-    border-radius: 6px;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    border: 1px solid #c2d4ff;
-    color: #003366;
-    box-shadow: 0 2px 4px rgba(0, 51, 102, 0.08);
-    transition: box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
-}
-
-.libro-card:hover {
-    border-color: #0052cc;
-    box-shadow: 0 3px 8px rgba(0, 51, 102, 0.18);
-    background: #f5f9ff;
-}
-
-/* FOOTER Y OUTPUT */
-
-#output {
-    margin: 8px 32px 16px 32px;
-    padding: 8px 12px;
-    background: #ffffff;
-    border-radius: 6px;
-    font-size: 12px;
-    white-space: pre-wrap;
-    border: 1px solid #c2d4ff;
-    color: #003366;
-}
+/* =========================================================
+   FOOTER
+   ========================================================= */
 
 footer {
     text-align: center;
@@ -452,13 +296,15 @@ footer {
     background: #e6f0ff;
 }
 
-/* MODALES */
+/* =========================================================
+   MODALES
+   ========================================================= */
 
 .modal-fondo {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 34, 85, 0.4);  /* overlay azul translúcido */
+    background: rgba(0, 34, 85, 0.4);
     align-items: center;
     justify-content: center;
     z-index: 1000;
@@ -525,4 +371,65 @@ footer {
     border: 1px solid #0047b3;
 }
 
+/* =========================================================
+   LOG DE OPERACIONES
+   ========================================================= */
+
+#output {
+    margin: 8px 32px 16px 32px;
+    padding: 8px 12px;
+    background: #ffffff;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: pre-wrap;
+    border: 1px solid #c2d4ff;
+    color: #003366;
+}
+
+/* Reset básico de botones para que todos partan igual */
+button {
+    margin: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    line-height: 1;
+    box-sizing: border-box;
+}
+
+/* Botón Cerrar sesión rectangular */
+.btn-header {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background: #ffffff;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-header:hover {
+    background: #f5f5f5;
+}
+
+/* Botón Home redondo con emoji de casa */
+.btn-home {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    background: #ffffff;
+    cursor: pointer;
+    font-size: 20px;  /* tamaño del emoji */
+}
+
+.btn-home:hover {
+    background: #f5f5f5;
+}
 

@@ -64,12 +64,17 @@ public class BibliotecaServiceImp implements BibliotecaService {
     }
 
     @Override
-    public List<Copia> crearCopia(Long idLibro, int nCopias) {
+    public String crearCopia(Long idLibro, int nCopias) {
 
         List<Copia> copias = new ArrayList<>();
 
-        Libro libro = libroRepository.findById(idLibro)
-                .orElseThrow(() -> new RuntimeException("Libro no encontrado"));
+        Optional<Libro> optLibro = libroRepository.findById(idLibro);
+        Libro libro;
+        if (optLibro.isPresent())
+            libro = optLibro.get();
+        else
+            return "Libro no encontrado";
+
         for (int i = 0; i< nCopias; i++){
             Copia copia = new Copia();
             copia.setLibro(libro);
@@ -77,7 +82,8 @@ public class BibliotecaServiceImp implements BibliotecaService {
             copiaRepository.save(copia);
             copias.add(copia);
         }
-        return copias;
+
+        return "Copias creadas correctamente";
     }
 
     @Override
@@ -145,6 +151,14 @@ public class BibliotecaServiceImp implements BibliotecaService {
 
     @Override
     public String prestar(Long idLector, Long idCopia) {
+        try {
+            if (idLector == null || idCopia == null) {
+                throw new Exception("illegal arguments");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         Lector lector = lectorRepository.findById(idLector).orElseThrow();
         Copia copia = copiaRepository.findById(idCopia).orElseThrow();
 
@@ -158,7 +172,7 @@ public class BibliotecaServiceImp implements BibliotecaService {
         List<Prestamo> prestamos = getPrestamosLector(idLector);
         List<Prestamo> prestamosActivos = prestamos.stream().filter(p -> p.getFin()==null).toList();
 
-        if (prestamosActivos.size() >= 3) {
+        if (!prestamosActivos.isEmpty() && prestamosActivos.size() >= 3) {
             return "Demasiados prestamos activos.";
         }
 

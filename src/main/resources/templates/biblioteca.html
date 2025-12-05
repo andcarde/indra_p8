@@ -7,24 +7,34 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="/css/biblioteca.css">
-    <link rel="stylesheet" href="/css/libro.css">
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- JS propio -->
 
-    <script src="/js/biblioteca.js" defer></script>
-    <script src="/js/crear-autor.js" defer></script>
-    <script src="/js/prestar.js" defer></script>
     <script src="/js/message.js" defer></script>
-    <script src="/js/toolbar.js" defer></script>
+    <script src="/js/biblioteca.js" defer></script>
 </head>
 <body>
 
+
 <header>
-    <span class="logo-circle">📚</span>
-    <span class="titulo">Biblioteca</span>
+    <div class="header-left">
+        <span class="logo-circle">📚</span>
+        <span class="titulo">Biblioteca</span>
+    </div>
+
+    <div class="header-right">
+        <button type="button" class="btn-home" onclick="window.location.href='/biblioteca'">
+            🏠
+        </button>
+        <form action="/logout" method="post">
+            <button type="submit" class="btn-header">
+                Cerrar sesión
+            </button>
+        </form>
+    </div>
 </header>
 
 <!-- Barra superior de acciones -->
@@ -107,6 +117,22 @@
         <div class="botones">
             <button class="btn-cancelar" onclick="cerrarModal('#modalLibro')">Cancelar</button>
             <button class="btn-aceptar" onclick="crearLibro()">Crear</button>
+        </div>
+    </div>
+</div>
+<div id="modalPrestar" class="modal-fondo">
+    <div class="modal">
+        <h4>Prestar libro</h4>
+
+        <label>ID Copia</label>
+        <input type="number" id="prestar_idCopia">
+
+        <label>ID Lector</label>
+        <input type="number" id="prestar_idLector">
+
+        <div class="botones">
+            <button class="btn-cancelar" onclick="cerrarModal('#modalPrestar')">Cancelar</button>
+            <button class="btn-aceptar" id="btnConfirmarPrestamo">Confirmar</button>
         </div>
     </div>
 </div>

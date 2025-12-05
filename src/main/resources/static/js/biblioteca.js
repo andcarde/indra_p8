@@ -4,7 +4,7 @@ function abrirModal(selector) {
 }
 
 function cerrarModal(selector) {
-    $(selector).hide();
+    $(selector).css("display", "none");
 }
 
 // ==== Inicio ====
@@ -12,6 +12,7 @@ $(document).ready(function () {
     cargarLibros();
 
     // Botones de la toolbar
+    $("#btnPrestar").click(() => abrirModal("#modalPrestar"));
     $("#btnMostrarPrestamos").click(mostrarPrestamos);
     $("#btnDevolverPrestamo").click(() => abrirModal("#modalDevolver"));
     $("#btnCrearAutor").click(() => abrirModal("#modalAutor"));
@@ -50,8 +51,8 @@ function cargarLibros() {
 
 // Navegación al detalle de libro (libro.html)
 function irADetalleLibro(idLibro) {
-    if (!idLibro) return;
-    // antes: /libro.html?id=...
+    if (!idLibro)
+        return;
     window.location.href = "/libro?id=" + encodeURIComponent(idLibro);
 }
 
@@ -108,6 +109,35 @@ function crearAutor() {
         }
     });
 }
+
+$(document).ready(() => {
+    $("#btnConfirmarPrestamo").on("click", function () {
+        let idCopia = $("#prestar_idCopia").val();
+        let idLector = $("#prestar_idLector").val();
+        let body = {
+            idCopia: idCopia,
+            idLector: idLector
+        }
+
+        $.ajax({
+            url: `/biblioteca/prestar`,
+            type: "POST",
+            data: JSON.stringify(body),
+            contentType: "application/json",
+            success: function (message) {
+                cerrarModal("#modalPrestar");
+                if (!message)
+                    showMessage("Se ha prestado la copia.");
+                else
+                    showMessage(message);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                cerrarModal("#modalPrestar");
+                showMessage("No se ha podido prestar la copia.");
+            }
+        });
+    });
+});
 
 // ==== Crear libro ====
 function crearLibro() {

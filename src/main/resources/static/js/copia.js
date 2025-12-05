@@ -72,7 +72,6 @@ function enviarReparacionCopia(idCopia) {
         type: 'PUT',
         success: function () {
             alert("Copia " + idCopia + " enviada a reparación.");
-            // cargarCopia(idCopia); // si quieres refrescar estado
         },
         error: function () {
             alert("Error al enviar a reparación la copia " + idCopia);

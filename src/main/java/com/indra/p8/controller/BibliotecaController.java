@@ -3,6 +3,7 @@ package com.indra.p8.controller;
 
 import com.indra.p8.DTOs.CrearAutorDTO;
 import com.indra.p8.DTOs.CrearLibroDTO;
+import com.indra.p8.DTOs.CrearPrestamoDTO;
 import com.indra.p8.model.*;
 import com.indra.p8.service.BibliotecaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +35,9 @@ public class BibliotecaController {
     }
 
     @PostMapping("/crearcopia{idLibro}")
-    public List<Copia> crearCopia(@PathVariable Long idLibro, @RequestParam int ncopias) {
-        List<Copia> copias;
-        copias = service.crearCopia(idLibro, ncopias);
-        return copias;
+    public ResponseEntity<String> crearCopia(@PathVariable Long idLibro, @RequestParam int ncopias) {
+        String message = service.crearCopia(idLibro, ncopias);
+        return ResponseEntity.ok(message);
     }
     @GetMapping("/prestamosLector/{idLector}")
     public ResponseEntity<List<Prestamo>> getPrestamosLector(@PathVariable Long idLector){
@@ -50,9 +50,10 @@ public class BibliotecaController {
         return ResponseEntity.ok(isOk);
     }
 
-    @PutMapping("/prestar/{idLector}/{idCopia}")
-    public ResponseEntity<String> prestar(@PathVariable Long idLector,
-                                          @PathVariable Long idCopia) {
+    @PostMapping("/prestar")
+    public ResponseEntity<String> prestar(@RequestBody CrearPrestamoDTO body) {
+        Long idLector = body.getIdLector();
+        Long idCopia = body.getIdCopia();
         String responseText = service.prestar(idLector, idCopia);
         return ResponseEntity.ok(responseText);
     }

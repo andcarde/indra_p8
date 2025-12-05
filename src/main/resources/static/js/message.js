@@ -1,34 +1,37 @@
 function showMessage(message) {
-    // Crear un contenedor div para el modal
+    // Crear un contenedor para el modal
     const modalDiv = document.createElement('div');
+    modalDiv.classList.add('modal-fondo'); // fondo semi-transparente
+
+    // Contenido del modal
     modalDiv.innerHTML = `
-    <div class="modal fade" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Mensaje</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-          </div>
-          <div class="modal-body">
+        <div class="modal">
+            <h4>Mensaje</h4>
             <p>${message}</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
-          </div>
+            <div class="botones">
+                <button class="btn-aceptar">Cerrar</button>
+            </div>
         </div>
-      </div>
-    </div>
     `;
 
-    // Añadir el modal al body
+    // Añadir al body
     document.body.appendChild(modalDiv);
 
-    // Inicializar y mostrar el modal con Bootstrap
-    const bootstrapModal = new bootstrap.Modal(modalDiv.querySelector('.modal'));
-    bootstrapModal.show();
+    // Función para cerrar modal
+    function cerrarModal() {
+        document.body.removeChild(modalDiv);
+    }
 
-    // Eliminar el modal del DOM cuando se cierre
-    modalDiv.querySelector('.modal').addEventListener('hidden.bs.modal', () => {
-        modalDiv.remove();
+    // Evento del botón Cerrar
+    modalDiv.querySelector('.btn-aceptar').addEventListener('click', cerrarModal);
+
+    // También cerrar al hacer clic fuera del modal
+    modalDiv.addEventListener('click', function(e) {
+        if (e.target === modalDiv) {
+            cerrarModal();
+        }
     });
+
+    // Mostrar modal (flex display)
+    modalDiv.style.display = 'flex';
 }

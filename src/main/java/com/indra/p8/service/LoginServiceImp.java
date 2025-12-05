@@ -11,10 +11,23 @@ import java.util.Optional;
 @Service
 public class LoginServiceImp implements LoginService {
 
-    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Autowired
     private BibliotecarioRepository bibliotecarioRepository;
+
+    @Override
+    public Bibliotecario getBibliotecario(String username) {
+        Optional<Bibliotecario> optBibliotecario =
+                bibliotecarioRepository.findByUsername(username);
+        if (optBibliotecario.isEmpty())
+            return null;
+
+        Bibliotecario bibliotecario = optBibliotecario.get();
+        String hash = bibliotecario.getPassword();
+        return bibliotecario;
+    }
+
 
     @Override
     public boolean login(String username, String password) {
