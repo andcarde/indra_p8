@@ -13,6 +13,7 @@ $(document).ready(function () {
 
     $("#btnBaja").click(() => darDeBajaCopia(idCopia));
     $("#btnReparar").click(() => enviarReparacionCopia(idCopia));
+    $("#btnDevolver").click(()=>devolvere(idCopia));
 });
 
 function cargarCopia(idCopia) {

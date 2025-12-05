@@ -109,6 +109,41 @@ public class BibliotecaServiceImp implements BibliotecaService {
     }
 
     @Override
+    public boolean devolverCopia(Long idCopia) {
+        try{
+            Copia copia = copiaRepository.findById(idCopia).orElseThrow();
+            List<Prestamo> prestamos=  prestamoRepository.findByCopiaId(idCopia);
+            Optional<Prestamo> ultimoPrestamoOp = prestamos.stream().filter(p -> p.getFin() != null)
+                    .findFirst();
+            if (!ultimoPrestamoOp.isPresent()) {
+                return false;
+            }
+            Prestamo ultimoPrestamo = ultimoPrestamoOp.get();
+            Lector lector = ultimoPrestamo.getLector();
+
+            ultimoPrestamo.setFin(LocalDate.now());
+            prestamoRepository.save(ultimoPrestamo);
+
+            // Verificar retraso
+            LocalDate inicio = ultimoPrestamo.getInicio();
+            LocalDate fin = ultimoPrestamo.getFin();
+            long diasPrestamo = fin.toEpochDay() - inicio.toEpochDay();
+
+            if (diasPrestamo > 30) {
+                long diasRetraso = diasPrestamo - 30;
+                int diasMulta = (int) diasRetraso * 2;
+                multar(lector, diasMulta);
+            }
+            copiaRepository.save(copia);
+            return true;
+
+    } catch (Exception e) {
+        return false;
+    }
+
+    }
+
+    @Override
     public String prestar(Long idLector, Long idCopia) {
         Lector lector = lectorRepository.findById(idLector).orElseThrow();
         Copia copia = copiaRepository.findById(idCopia).orElseThrow();

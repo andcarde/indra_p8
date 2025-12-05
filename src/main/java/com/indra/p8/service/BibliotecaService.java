@@ -12,6 +12,7 @@ public interface BibliotecaService {
     Libro crearLibro(CrearLibroDTO dto);
     List<Copia> crearCopia(Long idLibro, int nCopias);
     boolean devolver(Long idPrestamo);
+    boolean devolverCopia(Long idCopia);
     String prestar(Long idLector, Long idCopia);
     List<Libro> getLibros();
     boolean repararCopia(Long idCopia);
