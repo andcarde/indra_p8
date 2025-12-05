@@ -2,13 +2,6 @@ $(document).ready(function () {
     const params = new URLSearchParams(window.location.search);
     const idLibro = params.get("id");
 
-    function abrirModal(selector) {
-        $(selector).css("display", "flex");
-    }
-
-    function cerrarModal(selector) {
-        $(selector).css("display", "none");
-    }
     if (!idLibro) {
         $("body").html(
             '<div class="container mt-5"><div class="alert alert-warning">No se ha indicado ningún libro.</div></div>'
@@ -109,7 +102,7 @@ function crearCopiasLibro() {
     const ncopias= $("#inputNumCopias").val();
     $.ajax({
         url: '/biblioteca/crearcopia' + encodeURIComponent(idLibro),
-        type: 'GET',
+        type: 'POST',
         data:{ncopias},
         success: function (libro) {
             window.location.href = "/libro?id=" + encodeURIComponent(idLibro);
@@ -120,4 +113,14 @@ function crearCopiasLibro() {
         }
     });
 }
+function abrirModal(selector) {
+    $(selector).css("display", "flex");
+}
 
+function cerrarModal(selector) {
+    $(selector).css("display", "none");
+}
+
+function volver() {
+    window.location.href = "/biblioteca";
+}

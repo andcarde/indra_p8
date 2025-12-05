@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,6 +96,7 @@ public class BibliotecaServiceImp implements BibliotecaService {
 
             prestamo.setFin(LocalDate.now());
             prestamoRepository.save(prestamo);
+            copia.setEstado(EstadoCopia.BIBLIOTECA);
 
             // Verificar retraso
             LocalDate inicio = prestamo.getInicio();
@@ -119,20 +121,25 @@ public class BibliotecaServiceImp implements BibliotecaService {
         try{
             Copia copia = copiaRepository.findById(idCopia).orElseThrow();
             List<Prestamo> prestamos=  prestamoRepository.findByCopiaId(idCopia);
-            Optional<Prestamo> ultimoPrestamoOp = prestamos.stream().filter(p -> p.getFin() != null)
+            Optional<Prestamo> prestamoActivoOpt = prestamos.stream()
+                    .filter(p -> p.getFin() == null)
+                    .sorted(
+                            Comparator.comparing(Prestamo::getInicio).reversed())
                     .findFirst();
-            if (!ultimoPrestamoOp.isPresent()) {
+
+            if (!prestamoActivoOpt.isPresent()) {
                 return false;
             }
-            Prestamo ultimoPrestamo = ultimoPrestamoOp.get();
-            Lector lector = ultimoPrestamo.getLector();
+            Prestamo prestamoActivo = prestamoActivoOpt.get();
+            Lector lector = prestamoActivo.getLector();
 
-            ultimoPrestamo.setFin(LocalDate.now());
-            prestamoRepository.save(ultimoPrestamo);
+            prestamoActivo.setFin(LocalDate.now());
+            prestamoRepository.save(prestamoActivo);
+            copia.setEstado(EstadoCopia.BIBLIOTECA);
 
             // Verificar retraso
-            LocalDate inicio = ultimoPrestamo.getInicio();
-            LocalDate fin = ultimoPrestamo.getFin();
+            LocalDate inicio = prestamoActivo.getInicio();
+            LocalDate fin = prestamoActivo.getFin();
             long diasPrestamo = fin.toEpochDay() - inicio.toEpochDay();
 
             if (diasPrestamo > 30) {
@@ -232,11 +239,18 @@ public class BibliotecaServiceImp implements BibliotecaService {
     }
 
     @Override
-    public boolean deleteCopia(Long idCopia){
+    public void deleteCopia(Long idCopia){
+        copiaRepository.deleteById(idCopia);
+    }
+
+    @Override
+    public boolean mandarBibliotecaCopia(Long idCopia){
         try {
-            Optional<Copia> copia = copiaRepository.findById(idCopia);
-            if (copia.isPresent()) {
-                copiaRepository.delete(copia.get());
+            Optional<Copia> optCopia = copiaRepository.findById(idCopia);
+            if (optCopia.isPresent()) {
+                Copia copia = optCopia.get();
+                copia.setEstado(EstadoCopia.BIBLIOTECA);
+                copiaRepository.save(copia);
                 return true;
             }
         } catch (Exception ignored) {}

@@ -59,7 +59,7 @@ public class BibliotecaController {
     }
 
     @PutMapping("/devolver/{idCopia}")
-    public ResponseEntity<Boolean> prestarCopia(@PathVariable Long idCopia){
+    public ResponseEntity<Boolean> devolverCopia(@PathVariable Long idCopia){
         boolean isOk=service.devolverCopia(idCopia);
         return ResponseEntity.ok(isOk);
     }
@@ -99,4 +99,8 @@ public class BibliotecaController {
         service.deleteCopia(idCopia);
     }
 
+    @PutMapping("/copia/{idCopia}/biblioteca")
+    public void mandarBibliotecaCopia(@PathVariable Long idCopia){
+        service.mandarBibliotecaCopia(idCopia);
+    }
 }

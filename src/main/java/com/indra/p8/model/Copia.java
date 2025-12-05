@@ -25,6 +25,6 @@ public class Copia {
     @JoinColumn(name = "id_libro", nullable = false)
     private Libro libro;
 
-    @OneToMany(mappedBy = "copia")
+    @OneToMany(mappedBy = "copia",cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Prestamo> prestamos;
 }

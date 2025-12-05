@@ -5,11 +5,8 @@
     <title>Detalle de libro</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/biblioteca.css">
-    
-    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- JS propio -->
+    <script src="/js/message.js" defer></script>
     <script src="/js/libro2.js" defer></script>
 </head>
 <body>
@@ -20,6 +17,9 @@
     </div>
 
     <div class="header-right">
+        <button type="button" class="btn-home" onclick="volver()">
+            🔙
+        </button>
         <button type="button" class="btn-home" onclick="window.location.href='/biblioteca'">
             🏠
         </button>

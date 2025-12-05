@@ -16,9 +16,10 @@ public interface BibliotecaService {
     String prestar(Long idLector, Long idCopia);
     List<Libro> getLibros();
     boolean repararCopia(Long idCopia);
-    boolean deleteCopia(Long idCopia);
+    void deleteCopia(Long idCopia);
     List<Prestamo> getPrestamosLector(Long idLector);
     Libro getLibroById (Long idLibro);
     List<Copia> getCopiasByLibroId(Long idLibro);
     Copia getCopiaById(Long idCopia);
+    boolean mandarBibliotecaCopia(Long idCopia);
 }
