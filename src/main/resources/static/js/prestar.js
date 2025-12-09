@@ -1,68 +1,81 @@
-function showPrestarModal() {
+if (!MESSAGE_JS)
+    alert("Fallo de dependencias en prestar.js")
 
-    // Crear dinámicamente el modal
-    const modalDiv = $(`
-    <div class="modal fade" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+$(document).ready(() => {
+    $("#prestar_fin").on("change", function () {
+        let valor = $(this).val();
+        if (!valor)
+            return;
 
-          <div class="modal-header">
-            <h5 class="modal-title">Prestar libro</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
+        let limite = new Date(valor);
+        let hoy = new Date();
+        let manana = new Date();
+        let maximo = new Date();
 
-          <div class="modal-body">
-            <div class="mb-3">
-              <label class="form-label">ID Copia</label>
-              <input type="number" id="modal_idCopia" class="form-control">
-            </div>
+        // Normalizar
+        hoy.setHours(0,0,0,0);
+        limite.setHours(0,0,0,0);
 
-            <div class="mb-3">
-              <label class="form-label">ID Lector</label>
-              <input type="number" id="modal_idLector" class="form-control">
-            </div>
-          </div>
+        // Definir límites
+        manana.setDate(hoy.getDate() + 1);
+        maximo.setDate(hoy.getDate() + 30);
 
-          <div class="modal-footer">
-            <button id="btnConfirmarPrestamo" class="btn btn-primary">Confirmar</button>
-          </div>
+        // Formatear
+        const formatear = (f) =>
+            f.toISOString().split("T")[0];
 
-        </div>
-      </div>
-    </div>
-    `);
+        // · VALIDACIONES
 
-    // Añadir al body
-    $('body').append(modalDiv);
+        // Fecha anterior a hoy
+        if (limite < hoy) {
+            showMessage("La fecha no puede ser anterior a hoy.");
+            $(this).val(formatear(manana));
+        }
+        // Fecha igual a hoy
+        else if (limite.getTime() === hoy.getTime()) {
+            showMessage("La fecha no puede ser hoy. Debe ser al menos mañana.");
+            $(this).val(formatear(manana));
+        }
+        // Fecha superior al límite
+        else if (limite > maximo) {
+            showMessage("La fecha no puede despues de dentro de 30 días.");
+            $(this).val(formatear(maximo));
+        }
+    });
 
-    // Crear instancia de modal Bootstrap
-    const modal = new bootstrap.Modal(modalDiv[0]);
-    modal.show();
+    $("#btnConfirmarPrestamo").on("click", function () {
+        let idCopia = $("#prestar_idCopia").val();
+        let idLector = $("#prestar_idLector").val();
+        let fechaLimite = $("#prestar_fechaLimite").val();
 
-    // Acción del botón confirmar
-    modalDiv.find("#btnConfirmarPrestamo").on("click", function () {
-        let idCopia = $("#modal_idCopia").val();
-        let idLector = $("#modal_idLector").val();
+        let body = {
+            idCopia,
+            idLector,
+            fechaLimite
+        }
 
         $.ajax({
-            url: `/prestar/${idLector}/${idCopia}`,
+            url: `/biblioteca/prestar`,
             type: "POST",
-            success: function (message) {
-                modal.hide();
-                if (!message)
-                    showMessage("Aviso", "Se ha prestado la copia.");
-                else
-                    showMessage("Aviso", message);
+            data: JSON.stringify(body),
+            contentType: "application/json",
+            success: function () {
+                cerrarModal("#modalPrestar");
+                showMessage("Se ha prestado la copia.");
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                modal.hide();
-                showMessage("Error", "No se ha podido prestar la copia.");
+                closeAndShowMessage(jqXHR,
+                    "Prestar",
+                    "No se ha podido prestar la copia.");
             }
         });
     });
+});
 
-    // Eliminar modal del DOM al cerrarse
-    modalDiv.on('hidden.bs.modal', function () {
-        modalDiv.remove();
-    });
+function closeAndShowMessage(jqXHR, modalName, byDefault) {
+    cerrarModal("#modal" + modalName);
+    let message = jqXHR.responseText;
+    if (!message)
+        message = byDefault;
+    showMessage("No se ha podido prestar la copia.");
 }

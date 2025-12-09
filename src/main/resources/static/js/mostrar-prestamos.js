@@ -68,6 +68,8 @@ $(document).ready(function () {
         }
     }
 
+    // TABLAS DINÁMICAS POR PESTAÑA
+
     function cargarActivos() {
 
     }
