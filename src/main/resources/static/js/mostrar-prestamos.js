@@ -1,95 +1,178 @@
+/*
+GET /biblioteca/prestamosActivos -> List<MostrarPrestamoDTO>
+GET /bibliotecaprestamosHistoricos -> List<MostrarPrestamoDTO>
+GET /biblioteca/prestamosLector/{idLector} -> MostrarPrestamoDTO
+class MostrarPrestamoDTO {
+    Long idCopia;
+    Long idLector;
+    LocalDate inicio;
+    LocalDate limite;
+    LocalDate fin;
+}
+*/
+
 $(document).ready(function () {
     $("#btnMostrarPrestamos").on("click", crearModalPrestamos);
-
-    function crearModalPrestamos() {
-        // Eliminar si ya existe
-        $("#modalVerPrestamo").remove();
-
-        // Plantilla HTML del modal
-        const modalHTML = `
-        <div id="modalVerPrestamo" class="custom-modal-overlay">
-            <div class="custom-modal">
-                <div class="custom-modal-header">Mostrar préstamos</div>
-
-                <div class="custom-modal-tabs">
-                    <div class="custom-modal-tab active" data-tab="activos">Activos</div>
-                    <div class="custom-modal-tab" data-tab="historico">Histórico</div>
-                    <div class="custom-modal-tab" data-tab="lector">Por lector</div>
-                </div>
-
-                <div class="custom-modal-body" id="modalBodyContent">
-                    <!-- Contenido dinámico -->
-                </div>
-
-                <div class="custom-modal-footer">
-                    <button id="cerrarModalPrestamos">Cerrar</button>
-                </div>
-            </div>
-        </div>`;
-
-        $("body").append(modalHTML);
-
-        // Cargar contenido inicial
-        cargarTabla("activos");
-
-        // Control de pestañas
-        $(".custom-modal-tab").on("click", function () {
-            $(".custom-modal-tab").removeClass("active");
-            $(this).addClass("active");
-
-            const tab = $(this).data("tab");
-            cargarTabla(tab);
-        });
-
-        // Botón cerrar
-        $("#cerrarModalPrestamos").on("click", function () {
-            $("#modalVerPrestamo").remove();
-        });
-    }
-
-    // Función para cargar tablas
-    function cargarTabla(tab) {
-        let tabla = `<table><thead><tr>
-                     <th>ID Copia</th>`;
-        if (tab !== "lector")
-            tabla += `<th>ID Lector</th>`
-        tabla += `<th>Fecha de inicio</th>
-                  <th>Fecha límite</th>`
-        if (tab !== "activos")
-            tabla += `<th>Fecha de fin</th>`;
-        tabla += `</tr></thead></tbody></table>`;
-        $("#modalBodyContent").html(tabla);
-        switch(tab) {
-            case "activos":
-                cargarActivos();
-                break;
-            case "historicos":
-            // Completar
-        }
-    }
-
-    // TABLAS DINÁMICAS POR PESTAÑA
-
-    function cargarActivos() {
-
-    }
-
-    function cargarHistoricos() {
-
-    }
-
-    function cargarPrestamoByIdLector(idLector) {
-
-    }
-
-    /* Enviado desde Java: List<MostrarPrestamoDTO
-    public class MostrarPrestamoDTO {
-
-        private Long idCopia;
-        private Long idLector;
-        private LocalDate inicio;
-        private LocalDate limite;
-        private LocalDate fin;
-    }
-    */
 });
+
+function crearModalPrestamos() {
+    // Eliminar si ya existe
+    $("#modalVerPrestamo").remove();
+
+    // Plantilla HTML del modal
+    const modalHTML = `
+    <div id="modalVerPrestamo" class="mostrar-prestamos-modal-overlay">
+        <div class="mostrar-prestamos-modal">
+            <div class="mostrar-prestamos-modal-header">Mostrar préstamos</div>
+
+            <div class="mostrar-prestamos-modal-tabs">
+                <div class="mostrar-prestamos-modal-tab active" data-tab="activos">Activos</div>
+                <div class="mostrar-prestamos-modal-tab" data-tab="historico">Histórico</div>
+                <div class="mostrar-prestamos-modal-tab" data-tab="lector">Por lector</div>
+            </div>
+
+            <div class="mostrar-prestamos-modal-body" id="modalBodyContent">
+                <!-- Contenido dinámico -->
+            </div>
+
+            <div class="mostrar-prestamos-modal-footer">
+                <button id="cerrarModalPrestamos">Cerrar</button>
+            </div>
+        </div>
+    </div>`;
+
+    $("body").append(modalHTML);
+
+    // Cargar contenido inicial
+    cargarTabla("activos");
+
+    // Control de pestañas
+    $(".mostrar-prestamos-modal-tab").on("click", function () {
+        $(".mostrar-prestamos-modal-tab").removeClass("active");
+        $(this).addClass("active");
+
+        const tab = $(this).data("tab");
+        cargarTabla(tab);
+    });
+
+    // Botón cerrar
+    $("#cerrarModalPrestamos").on("click", function () {
+        $("#modalVerPrestamo").remove();
+    });
+}
+
+// Función para cargar tablas
+function cargarTabla(tab) {
+
+    let tabla =
+        `<table><thead><tr>
+            <th>ID Copia</th>`;
+
+    if (tab !== "lector")
+        tabla += `<th>ID Lector</th>`
+
+    tabla += `<th>Fecha de inicio</th>
+              <th>Fecha límite</th>`;
+
+    if (tab !== "activos")
+        tabla += `<th>Fecha de fin</th>`;
+
+    tabla += `</tr></thead>
+              <tbody id="tbodyPrestamos"></tbody>
+              </table>`;
+
+    // Si es por lector añadimos input + botón
+    if (tab === "lector") {
+        tabla =
+            `<input type="number" id="inputIdLector" placeholder="ID lector">
+         <button id="btnBuscarPrestamosLector">Buscar</button>
+         <br><br>` + tabla;
+    }
+
+    $("#modalBodyContent").html(tabla);
+
+    switch(tab) {
+        case "activos":
+            cargarActivos();
+            break;
+
+        case "historico":
+            cargarHistoricos();
+            break;
+
+        case "lector":
+            $("#btnBuscarPrestamosLector").on("click", function () {
+                const id = $("#inputIdLector").val();
+                if (!id) {
+                    alert("Introduce un ID de lector");
+                    return;
+                }
+                cargarPrestamoByIdLector(id);
+            });
+            break;
+    }
+}
+
+// TABLAS DINÁMICAS POR PESTAÑA
+
+function cargarActivos() {
+    $.ajax({
+        url: "/biblioteca/prestamosActivos",
+        method: "GET",
+        success: function (data) {
+            rellenarTabla(data, false);
+        }
+    });
+}
+
+function cargarHistoricos() {
+    $.ajax({
+        url: "/biblioteca/prestamosHistoricos",
+        method: "GET",
+        success: function (data) {
+            rellenarTabla(data, true);
+        }
+    });
+}
+
+function cargarPrestamoByIdLector(idLector) {
+    $.ajax({
+        url: "/biblioteca/prestamosLector/" + idLector,
+        method: "GET",
+        success: function (data) {
+            // el endpoint devuelve 1 solo DTO, rellenarTabla necesita un array
+            rellenarTabla([data], true);
+        },
+        error: function (jqXHR) {
+            closeAndShowMessage(jqXHR,
+                "VerPrestamo",
+                "No se pueden mostrar los préstamos.")
+        }
+    });
+}
+
+function rellenarTabla(lista, incluirFin) {
+
+    let html = "";
+
+    lista.forEach(p => {
+
+        html += `
+    <tr>
+        <td>${p.idCopia}</td>`;
+
+        if (p.idLector !== undefined && p.idLector !== null)
+            html += `<td>${p.idLector}</td>`;
+
+        html += `
+        <td>${p.inicio}</td>
+        <td>${p.limite}</td>`;
+
+        if (incluirFin)
+            html += `<td>${p.fin ?? ""}</td>`;
+
+        html += `</tr>`;
+    });
+
+    $("#tbodyPrestamos").html(html);
+}

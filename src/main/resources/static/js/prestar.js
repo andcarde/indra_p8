@@ -71,11 +71,3 @@ $(document).ready(() => {
         });
     });
 });
-
-function closeAndShowMessage(jqXHR, modalName, byDefault) {
-    cerrarModal("#modal" + modalName);
-    let message = jqXHR.responseText;
-    if (!message)
-        message = byDefault;
-    showMessage("No se ha podido prestar la copia.");
-}

@@ -122,8 +122,31 @@ header span.titulo {
 
 .main-layout {
     display: flex;
+    flex-direction: column;
     padding: 24px 32px;
     gap: 24px;
+}
+
+.buscadorLibros {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+#textOrNumberRow {
+    width: 100%;
+}
+
+#textOrNumberRow input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+#btnBuscar {
+    align-self: center;
+    padding: 10px 20px;
 }
 
 .col-libros {
@@ -557,6 +580,11 @@ button {
     color: #ffffff;
 }
 
+.btn-success {
+    background: #36dc12;
+    border-color: #035919;
+    color: #ffffff;
+}
 .btn-warning {
     background: #f1c40f;
     border-color: #d4ac0d;

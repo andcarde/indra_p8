@@ -47,12 +47,12 @@ public class LibroController {
         return libroService.getLibrosAutor(idAutor);
     }
 
-    @GetMapping("/libro/tipo/{tipo}")
+    @GetMapping("/libro/tipo/{tipoLibro}")
     public List<Libro> getLibrosByGenero(@PathVariable TipoLibro tipoLibro){
         return libroService.getLibrosGeneros(tipoLibro);
     }
 
-    @GetMapping("/libro/titulo/{tipo}")
+    @GetMapping("/libro/titulo/{titulo}")
     public List<Libro> getLibrosByTitulo(@PathVariable String titulo){
         return libroService.getLibrosTitulo(titulo);
     }

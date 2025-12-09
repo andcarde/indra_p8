@@ -18,7 +18,6 @@ public class ReportServiceImp implements ReportService{
     private final LibroRepository libroRepository;
 
 
-    // 1) Libros más prestados
     @Override
     public List<LibroMasPrestadoDTO> librosMasPrestados() {
         return prestamoRepository.librosMasPrestados();

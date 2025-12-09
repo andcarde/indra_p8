@@ -1,8 +1,9 @@
 package com.indra.p8.controller;
 
+import com.indra.p8.model.Rol;
 import com.indra.p8.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,15 @@ public class LoginController {
     @GetMapping("/registro")
     public String mostrarFormularioRegistro() {
         return "register"; // templates/registro.html
+    }
+
+    @PostMapping("/admin/usuarios")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String crearUsuarioDesdeAdmin(@RequestParam String username,
+                                         @RequestParam String password,
+                                         @RequestParam Rol rol) {
+        loginService.crearBibliotecario(username, password);
+        return "redirect:/admin/usuarios";
     }
 
     @PostMapping("/registro")

@@ -1,0 +1,102 @@
+/* Fondo oscuro */
+.mostrar-prestamos-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* Contenedor del modal */
+.mostrar-prestamos-modal {
+    background: white;
+    width: 700px;
+    max-height: 90vh;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Título */
+.mostrar-prestamos-modal-header {
+    padding: 15px;
+    background: #2c3e50;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Toolbar pestañas */
+.mostrar-prestamos-modal-tabs {
+    display: flex;
+    background: #ddd;
+    border-bottom: 1px solid #ccc;
+}
+
+.mostrar-prestamos-modal-tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    user-select: none;
+    font-weight: bold;
+    border-right: 1px solid #bbb;
+    color: #555;
+}
+
+.mostrar-prestamos-modal-tab:hover {
+    background: #ccc;
+}
+
+.mostrar-prestamos-modal-tab.active {
+    background: white;
+    color: black;
+}
+
+/* Cuerpo modal */
+.mostrar-prestamos-modal-body {
+    padding: 15px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+/* Tablas */
+.mostrar-prestamos-modal-body table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.mostrar-prestamos-modal-body th, .mostrar-prestamos-modal-body td {
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+
+.mostrar-prestamos-modal-body th {
+    background: #f0f0f0;
+    font-weight: bold;
+}
+
+/* Footer */
+.mostrar-prestamos-modal-footer {
+    padding: 10px;
+    text-align: right;
+    border-top: 1px solid #ddd;
+}
+
+.mostrar-prestamos-modal-footer button {
+    padding: 8px 16px;
+    cursor: pointer;
+    border: none;
+    background: #2c3e50;
+    color: white;
+    border-radius: 5px;
+}
+
+.mostrar-prestamos-modal-footer button:hover {
+    background: #1b2838;
+}

@@ -24,7 +24,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(biblio.getUsername())
                 .password(biblio.getPassword())
-                .roles("BIBLIOTECARIO")
+                .roles(biblio.getRol().name()) // ADMIN, BIBLIOTECARIO, SOCIO
                 .build();
     }
 }
+

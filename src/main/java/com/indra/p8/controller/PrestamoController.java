@@ -1,6 +1,7 @@
 package com.indra.p8.controller;
 
 import com.indra.p8.DTOs.CrearPrestamoDTO;
+import com.indra.p8.DTOs.MostrarPrestamoDTO;
 import com.indra.p8.model.Prestamo;
 import com.indra.p8.service.Error;
 import com.indra.p8.service.PrestamoService;
@@ -11,22 +12,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/biblioteca")
 public class PrestamoController {
 
-    /*
-    // Writers
-    Resultado devolverByPrestamoId(Long idPrestamo);
-    Resultado devolverByCopiaId(Long idCopia);
-    Resultado prestar(Long idLector, Long idCopia, LocalDate fechaDevolucion);
-
-    // Readers
-    List<Prestamo> getPrestamosActivos();
-    List<Prestamo> getPrestamosHistoricos();
-    Resultado getPrestamosLector(Long idLector);
-    */
     @Autowired
     private PrestamoService service;
 
@@ -40,7 +31,39 @@ public class PrestamoController {
                     .body(resultado.getError());
         }
 
-        return ResponseEntity.ok(resultado.getResultado());
+        List<Prestamo> prestamos = resultado.getResultado();
+        List<MostrarPrestamoDTO> prestamosDTO = transformToDTO(prestamos);
+        return ResponseEntity.ok(prestamosDTO);
+    }
+
+    private List<MostrarPrestamoDTO> transformToDTO(List<Prestamo> prestamos) {
+        return prestamos.stream()
+                .map(p -> transformToDTO(p))
+                .collect(Collectors.toList());
+    }
+
+    private MostrarPrestamoDTO transformToDTO(Prestamo prestamo) {
+        MostrarPrestamoDTO dto = new MostrarPrestamoDTO();
+        dto.setIdCopia(prestamo.getCopia().getId());
+        dto.setIdLector(prestamo.getLector().getId());
+        dto.setInicio(prestamo.getInicio());
+        dto.setLimite(prestamo.getLimite());
+        dto.setFin(prestamo.getFin());
+        return dto;
+    }
+
+    @GetMapping("/prestamosActivos")
+    public ResponseEntity<?> getPrestamosActivos() {
+        List<Prestamo> prestamos = service.getPrestamosActivos();
+        List<MostrarPrestamoDTO> prestamosDTO = transformToDTO(prestamos);
+        return ResponseEntity.ok(prestamosDTO);
+    }
+
+    @GetMapping("/prestamosHistoricos")
+    public ResponseEntity<?> getPrestamosHistoricos() {
+        List<Prestamo> prestamos = service.getPrestamosHistoricos();
+        List<MostrarPrestamoDTO> prestamosDTO = transformToDTO(prestamos);
+        return ResponseEntity.ok(prestamosDTO);
     }
 
     @PostMapping("/prestar")

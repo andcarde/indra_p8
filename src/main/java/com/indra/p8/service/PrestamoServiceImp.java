@@ -65,20 +65,42 @@ public class PrestamoServiceImp implements PrestamoService {
 
     @Override
     public Error devolverByCopiaId(Long idCopia) {
-        Optional<Copia> optionalCopia = copiaRepository.findById(idCopia);
-        if (optionalCopia.isEmpty())
-            return new Error("COPIA_NOT_EXIST");
+        try{
+            Copia copia = copiaRepository.findById(idCopia).orElseThrow();
+            List<Prestamo> prestamos=  prestamoRepository.findByCopiaId(idCopia);
+            Optional<Prestamo> prestamoActivoOpt = prestamos.stream()
+                    .filter(p -> p.getFin() == null)
+                    .sorted(
+                            Comparator.comparing(Prestamo::getInicio).reversed())
+                    .findFirst();
 
-        List<Prestamo> prestamos = prestamoRepository.findByCopiaId(idCopia);
-        Optional<Prestamo> optionalPrestamo = prestamos.stream()
-                .filter(p -> p.getFin() == null)
-                .max(Comparator.comparing(Prestamo::getInicio));
+            if (prestamoActivoOpt.isEmpty()) {
+                return new Error("El prestamo no existe");
+            }
+            Prestamo prestamoActivo = prestamoActivoOpt.get();
+            Lector lector = prestamoActivo.getLector();
 
-        if (optionalPrestamo.isEmpty())
-            return new Error("PRESTAMO_NOT_EXIST");
+            prestamoActivo.setFin(LocalDate.now());
+            prestamoRepository.save(prestamoActivo);
+            copia.setEstado(EstadoCopia.BIBLIOTECA);
 
-        Prestamo prestamo = optionalPrestamo.get();
-        return devolver(prestamo);
+            // Verificar retraso
+            LocalDate inicio = prestamoActivo.getInicio();
+            LocalDate fin = prestamoActivo.getFin();
+            long diasPrestamo = fin.toEpochDay() - inicio.toEpochDay();
+
+            if (diasPrestamo > 30) {
+                long diasRetraso = diasPrestamo - 30;
+                int diasMulta = (int) diasRetraso * 2;
+                multaService.multar(lector, diasMulta);
+            }
+            copiaRepository.save(copia);
+            return new Error();
+
+        } catch (Exception e) {
+            return new Error("Error al devolver copia");
+        }
+
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.indra.p8.service;
 
 import com.indra.p8.model.Bibliotecario;
+import com.indra.p8.model.Rol;
 import com.indra.p8.repository.BibliotecarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,21 +46,26 @@ public class LoginServiceImp implements LoginService {
         return encoder.matches(password, hash);
     }
 
-    @Override
-    public boolean crearBibliotecario(String username, String password) {
+    public boolean crearUsuario(String username, String password, Rol rol) {
         if (bibliotecarioRepository.findByUsername(username).isPresent()) {
             System.out.println("Registro: el usuario '" + username + "' ya existe.");
             return false;
         }
+
         String hash = encoder.encode(password);
         Bibliotecario bibliotecario = new Bibliotecario();
         bibliotecario.setUsername(username);
         bibliotecario.setPassword(hash);
+        bibliotecario.setRol(rol);
 
         bibliotecarioRepository.save(bibliotecario);
-        System.out.println("Registro: usuario '" + username + "' creado correctamente.");
-
+        System.out.printf("Registro: usuario '%s' creado como %s.%n", username, rol);
         return true;
+    }
+
+    @Override
+    public boolean crearBibliotecario(String username, String password) {
+        return crearUsuario(username, password, Rol.SOCIO);
     }
 
 

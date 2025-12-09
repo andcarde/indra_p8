@@ -4,7 +4,6 @@ $(document).ready(function () {
 
     // Botones de la toolbar
     $("#btnPrestar").click(() => abrirModal("#modalPrestar"));
-    $("#btnMostrarPrestamos").click(mostrarPrestamos);
     $("#btnDevolverPrestamo").click(() => abrirModal("#modalDevolver"));
     $("#btnCrearAutor").click(() => abrirModal("#modalAutor"));
     $("#btnCrearLibro").click(() => abrirModal("#modalLibro"));
@@ -82,6 +81,7 @@ function irADetalleLibro(idLibro) {
 }
 
 
+/* DEPRECATED
 // ==== Mostrar préstamos de un lector ====
 function mostrarPrestamos() {
     const idLector = prompt("ID del lector del que quiere ver los préstamos:");
@@ -93,6 +93,7 @@ function mostrarPrestamos() {
         $("#output").text("Error al obtener préstamos: " + (err.status || "") + " " + (err.statusText || ""));
     });
 }
+*/
 
 // ==== Devolver préstamo (desde modal simple) ====
 function devolverPrestamoDesdeModal() {
@@ -339,10 +340,6 @@ function renderResultados() {
         });
     }else if(metodo === 'titulo'){
         const id= $("#searchLibro").val();
-        if (!id) {
-            showMessage("Tienes que introducir un titulo");
-            return;
-        }
         $.ajax({
             url: "/biblioteca/libro/titulo/" + encodeURIComponent(id),
             type: "GET",
