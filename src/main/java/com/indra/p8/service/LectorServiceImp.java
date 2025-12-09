@@ -6,6 +6,9 @@ import com.indra.p8.repository.LectorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class LectorServiceImp implements LectorService {
     @Autowired
@@ -13,15 +16,13 @@ public class LectorServiceImp implements LectorService {
 
     @Override
     public Lector crearLector(CrearLectorDTO dto){
-        Lector socio = lectorRepository.findByemail(dto.getEmail())
-                .orElseThrow(() -> new RuntimeException("No existe el socio"));
-
         Lector lector = new Lector();
-        lector.setNombre(socio.getNombre());
-        lector.setApellido(socio.getApellido());
-        lector.setTelefono(socio.getTelefono());
-        lector.setEmail(socio.getEmail());
-        lector.setEstado(socio.getEstado());
+        lector.setNombre(dto.getNombre());
+        lector.setApellido(dto.getApellido());
+        lector.setTelefono(dto.getTelefono());
+        lector.setEmail(dto.getEmail());
+        lector.setEstado(dto.getEstado());
+        lector.setDireccion(dto.getDireccion());
         lectorRepository.save(lector);
         return lector;
     }
@@ -37,12 +38,20 @@ public class LectorServiceImp implements LectorService {
         lector.setTelefono(dto.getTelefono());
         lector.setEmail(dto.getEmail());
         lector.setEstado(dto.getEstado());
+        lector.setDireccion(dto.getDireccion());
         lectorRepository.save(lector);
     }
 
     @Override
     public void deleteLector(Long idLector){
         lectorRepository.deleteById(idLector);
+    }
+
+    @Override
+    public List<Lector> getLectores() {
+        List<Lector> lectores = new ArrayList();
+        lectorRepository.findAll().forEach(lectores::add);
+        return lectores;
     }
 
     @Override

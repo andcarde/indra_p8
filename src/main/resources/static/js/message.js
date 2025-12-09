@@ -1,3 +1,14 @@
+const MESSAGE_JS = true;
+
+// ==== Helpers de modales ====
+function abrirModal(selector) {
+    $(selector).css("display", "flex");
+}
+
+function cerrarModal(selector) {
+    $(selector).css("display", "none");
+}
+
 function showMessage(message) {
     // Crear un contenedor para el modal
     const modalDiv = document.createElement('div');

@@ -8,28 +8,54 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/biblioteca")
-public class LectorController {
-    @Autowired
-    private LectorService lectorService;
+import java.util.List;
 
-    @GetMapping("/lector/crear/{idLector}")
-    public ResponseEntity<Lector> getLector(@PathVariable Long idLector){
+@RestController
+@RequestMapping("/biblioteca/lectores")
+public class LectorController {
+
+    private final LectorService lectorService;
+
+    public LectorController(LectorService lectorService) {
+        this.lectorService = lectorService;
+    }
+
+    // LISTAR TODOS
+    @GetMapping
+    public List<Lector> getLectores() {
+        return lectorService.getLectores();
+    }
+
+    // OBTENER UNO POR ID
+    @GetMapping("/{idLector}")
+    public ResponseEntity<Lector> getLector(@PathVariable Long idLector) {
         Lector lector = lectorService.getLector(idLector);
+        if (lector == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(lector);
     }
 
-    @PostMapping("/lector/crear/{idLector}")
-    public void crearLector(@RequestBody CrearLectorDTO dto) {
-        lectorService.crearLector(dto);
+    // CREAR
+    @PostMapping
+    public ResponseEntity<Lector> crearLector(@RequestBody CrearLectorDTO dto) {
+        Lector creado = lectorService.crearLector(dto);
+        return ResponseEntity.ok(creado);
     }
 
-    @DeleteMapping("/lector/eliminar/{idLector}")
-    public void deleteLector(@PathVariable Long idLector){lectorService.deleteLector(idLector);}
+    // ACTUALIZAR
+    @PutMapping("/{idLector}")
+    public ResponseEntity<Void> updateLector(@PathVariable Long idLector,
+                                             @RequestBody CrearLectorDTO lectorDto) {
+        lectorService.updateLector(idLector, lectorDto);
+        return ResponseEntity.noContent().build();
+    }
 
-    @PutMapping("/lector/editar/{idLector}")
-    public void updateLector(@PathVariable Long idLector, @RequestBody CrearLectorDTO lector){
-        lectorService.updateLector(idLector,lector);
+    // ELIMINAR
+    @DeleteMapping("/{idLector}")
+    public ResponseEntity<Void> deleteLector(@PathVariable Long idLector) {
+        lectorService.deleteLector(idLector);
+        return ResponseEntity.noContent().build();
     }
 }
+

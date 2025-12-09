@@ -9,5 +9,5 @@ public class CrearPrestamoDTO {
 
     private Long idLector;
     private Long idCopia;
-    private LocalDate fechaDevolucion;
+    private LocalDate fechaLimite;
 }

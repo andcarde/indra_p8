@@ -66,7 +66,7 @@ public class MultaServiceImp implements MultaService {
             doc.add(new Paragraph("Listado de Multas", titleFont));
             doc.add(new Paragraph(" "));
 
-            PdfPTable table = new PdfPTable(6);
+            PdfPTable table = new PdfPTable(7);
             table.setWidthPercentage(100);
             table.addCell("ID");
             table.addCell("Lector");

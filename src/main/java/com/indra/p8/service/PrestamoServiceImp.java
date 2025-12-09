@@ -47,13 +47,12 @@ public class PrestamoServiceImp implements PrestamoService {
             prestamoRepository.save(prestamo);
 
             // Gestión de multas
-            LocalDate inicio = prestamo.getInicio();
             LocalDate fin = prestamo.getFin();
-            long diasPrestamo = fin.toEpochDay() - inicio.toEpochDay();
+            LocalDate limite = prestamo.getLimite();
+            long diasRetraso = fin.toEpochDay() - limite.toEpochDay();
 
-            if (diasPrestamo > 30) {
+            if (diasRetraso > 0) {
                 Lector lector = prestamo.getLector();
-                long diasRetraso = diasPrestamo - 30;
                 int diasMulta = (int) diasRetraso * 2;
                 multaService.multar(lector, diasMulta);
             }
@@ -83,7 +82,7 @@ public class PrestamoServiceImp implements PrestamoService {
     }
 
     @Override
-    public Error prestar(Long idLector, Long idCopia, LocalDate fechaDevolucion) {
+    public Error prestar(Long idLector, Long idCopia, LocalDate fechaLimite) {
         // · Validaciones
 
         if (idLector == null || idCopia == null)
@@ -112,6 +111,7 @@ public class PrestamoServiceImp implements PrestamoService {
 
         Prestamo prestamo = new Prestamo();
         prestamo.setInicio(LocalDate.now());
+        prestamo.setLimite(fechaLimite);
         prestamo.setLector(lector);
         prestamo.setCopia(copia);
         prestamoRepository.save(prestamo);
@@ -124,22 +124,20 @@ public class PrestamoServiceImp implements PrestamoService {
 
     @Override
     public List<Prestamo> getPrestamosActivos() {
-        List<Prestamo> prestamosActivos = prestamoRepository
+        return prestamoRepository
                 .findAll()
                 .stream()
                 .filter(p -> p.getFin() == null)
                 .toList();
-        return prestamosActivos;
     }
 
     @Override
     public List<Prestamo> getPrestamosHistoricos() {
-        List<Prestamo> prestamosHistoricos = prestamoRepository
+        return prestamoRepository
                 .findAll()
                 .stream()
                 .filter(p -> p.getFin() != null)
                 .toList();
-        return prestamosHistoricos;
     }
 
     @Override

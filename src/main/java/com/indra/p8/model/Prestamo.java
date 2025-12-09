@@ -26,6 +26,9 @@ public class Prestamo {
     @Column(name = "fecha_devolucion")
     private LocalDate fin;
 
+    @Column(name = "fecha_limite")
+    private LocalDate limite;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "lector_id")
     @JsonIgnore

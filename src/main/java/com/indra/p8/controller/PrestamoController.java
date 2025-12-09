@@ -47,9 +47,9 @@ public class PrestamoController {
     public ResponseEntity<?> prestar(@RequestBody CrearPrestamoDTO body) {
         Long idLector = body.getIdLector();
         Long idCopia = body.getIdCopia();
-        LocalDate fechaDevolucion =  body.getFechaDevolucion();
+        LocalDate fechaLimite =  body.getFechaLimite();
 
-        Error error = service.prestar(idLector, idCopia, fechaDevolucion);
+        Error error = service.prestar(idLector, idCopia, fechaLimite);
         if (error.hasError()) {
             return ResponseEntity
                     .badRequest()

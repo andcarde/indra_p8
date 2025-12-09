@@ -1,5 +1,6 @@
 package com.indra.p8.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,5 +41,6 @@ public class Lector {
     private List<Prestamo> prestamos;
 
     @OneToOne(mappedBy = "lector", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Multa multa;
 }

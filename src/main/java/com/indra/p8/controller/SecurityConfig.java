@@ -25,8 +25,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         // Rutas públicas
-                        .requestMatchers("/", "/login", "/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/crearBibliotecario").permitAll()
+                        .requestMatchers("/", "/login", "/css/**", "/js/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/registro").permitAll()
                         .requestMatchers(HttpMethod.GET, "/registro").permitAll()
                         // Rutas que requieren estar logueado
                         .requestMatchers("/biblioteca/**", "/libro", "/copia").authenticated()

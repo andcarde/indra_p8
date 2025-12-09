@@ -1,12 +1,3 @@
-// ==== Helpers de modales ====
-function abrirModal(selector) {
-    $(selector).css("display", "flex");
-}
-
-function cerrarModal(selector) {
-    $(selector).css("display", "none");
-}
-
 // ==== Inicio ====
 $(document).ready(function () {
     cargarLibros();
@@ -17,6 +8,8 @@ $(document).ready(function () {
     $("#btnDevolverPrestamo").click(() => abrirModal("#modalDevolver"));
     $("#btnCrearAutor").click(() => abrirModal("#modalAutor"));
     $("#btnCrearLibro").click(() => abrirModal("#modalLibro"));
+    $("#btnCerrarSocios").click(()=>cerrarModal("#modalSocios"));
+    $(document).on('click', '#btnExportarMultas', exportarMultas);
     $("#btnGestionarSocios").click(() => {
         abrirModal("#modalSocios");
         mostrarSeccionSocios("listar");
@@ -142,35 +135,6 @@ function crearAutor() {
     });
 }
 
-$(document).ready(() => {
-    $("#btnConfirmarPrestamo").on("click", function () {
-        let idCopia = $("#prestar_idCopia").val();
-        let idLector = $("#prestar_idLector").val();
-        let body = {
-            idCopia: idCopia,
-            idLector: idLector
-        }
-
-        $.ajax({
-            url: `/biblioteca/prestar`,
-            type: "POST",
-            data: JSON.stringify(body),
-            contentType: "application/json",
-            success: function (message) {
-                cerrarModal("#modalPrestar");
-                if (!message)
-                    showMessage("Se ha prestado la copia.");
-                else
-                    showMessage(message);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                cerrarModal("#modalPrestar");
-                showMessage("No se ha podido prestar la copia.");
-            }
-        });
-    });
-});
-
 // ==== Crear libro ====
 function crearLibro() {
     const titulo= $("#libroTituloInput").val().trim();
@@ -188,15 +152,15 @@ function crearLibro() {
     };
 
     $.ajax({
-        url: "/biblioteca/crearlibro"+encodeURIComponent(idPrestamo)+"/delete",
-        type: "Delete",
+        url: "/biblioteca/crearlibro",
+        type: "POST",
         contentType: "application/json",
         data: JSON.stringify(payload),
         success: () => {
-            $("#output").text("Libro creado correctamente.");
+            showMessage("Libro creado correctamente.");
         },
         error: e => {
-            $("#output").text("Error al crear libro: " + (e.status || "") + " " + (e.statusText || ""));
+            showMessage("Error al crear libro: " + (e.status || "") + " " + (e.statusText || ""));
         }
     });
 }
@@ -336,6 +300,104 @@ function eliminarSocio(id) {
             showMessage("Error al eliminar socio: " + (e.status || "") + " " + (e.statusText || ""));
         }
     });
+}
+
+function actualizarUI() {
+    const metodo = $("#searchMethod").val();
+    const idAutorandTitulo=$("#textOrNumberRow");
+    const tipo=$("#tipoRow");
+    if (metodo === 'autorId' || metodo === 'titulo') {
+        tipo.css("display","none");
+        idAutorandTitulo.css("display","flex");
+        if(metodo === 'autorId'){
+            idAutorandTitulo.placeholder("Introduce el id del Autor");
+        }else idAutorandTitulo.placeholder("Introduce el titulo de la obra");
+    } else if (metodo === 'tipo') {
+        tipo.css("display","flex");
+        idAutorandTitulo.css("display","none");
+    }
+}
+
+function renderResultados() {
+    const metodo = $("#searchMethod").val();
+
+    if(metodo === 'autorId'){
+        const id= $("#searchLibro").val();
+        if (!id) {
+            showMessage("Tienes que introducir un id");
+            return;
+        }
+        $.ajax({
+            url: "/biblioteca/libro/autor/" + encodeURIComponent(id),
+            type: "GET",
+            success: (lista) => {
+                crearLista(lista);
+            },
+            error: e => {
+                showMessage("Error al buscar libros: " + (e.status || "") + " " + (e.statusText || ""));
+            }
+        });
+    }else if(metodo === 'titulo'){
+        const id= $("#searchLibro").val();
+        if (!id) {
+            showMessage("Tienes que introducir un titulo");
+            return;
+        }
+        $.ajax({
+            url: "/biblioteca/libro/titulo/" + encodeURIComponent(id),
+            type: "GET",
+            success: (lista) => {
+                crearLista(lista);
+            },
+            error: e => {
+                showMessage("Error al buscar libros: " + (e.status || "") + " " + (e.statusText || ""));
+            }
+        });
+    }else if(metodo === 'tipo'){
+        const tipo= $("#tipoEnum").val();
+        if (!tipo) {
+            showMessage("Tienes que introducir un titulo");
+            return;
+        }
+        $.ajax({
+            url: "/biblioteca/libro/tipo/" + encodeURIComponent(tipo),
+            type: "GET",
+            success: (lista) => {
+                crearLista(lista);
+            },
+            error: e => {
+                showMessage("Error al buscar libros: " + (e.status || "") + " " + (e.statusText || ""));
+            }
+        });
+    }
+}
+
+function crearLista(lista){
+    const $lista = $("#listaLibros").empty();
+    if (!lista || lista.length === 0) {
+        $lista.append("<em>No hay libros creados.</em>");
+        return;
+    }
+    lista.forEach(libro => {
+        const card = $(`
+                            <div class="libro-card">
+                                ${libro.titulo || "Sin título"}
+                            </div>
+                    `);
+
+        card.click(() => {
+            irADetalleLibro(libro.id);
+        });
+
+        $lista.append(card);
+    });
+}
+
+function exportarMultas(){
+    document.getElementById('btnExportarMultas')
+        .addEventListener('click', () => {
+        window.open('/biblioteca/export/pdf', '_blank')
+        });
 }
 
 

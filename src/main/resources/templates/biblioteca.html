@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/css/biblioteca.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/message.js" defer></script>
+    <script src="/js/prestar.js" defer></script>
     <script src="/js/biblioteca.js" defer></script>
 </head>
 <body>
@@ -40,10 +41,39 @@
     <button id="btnCrearAutor" class="secondary">Crear Autor</button>
     <button id="btnCrearLibro" class="secondary">Crear Libro</button>
     <button id="btnGestionarSocios" class="secondary">Gestionar socios</button>
+    <button id="btnExportarMultas" class="secondary">Exportar multas</button>
 </div>
 
 <!-- Layout principal: solo lista de libros -->
 <div class="main-layout">
+
+    <div class="buscadorLibros">
+        <label for="searchLibro">Buscador de libros</label>
+        <!-- Selector de método -->
+        <div class="row">
+            <label for="searchMethod">Buscar por:</label>
+            <select id="searchMethod" onchange="actualizarUI()">
+                <option value="autorId">ID Autor </option>
+                <option value="titulo">Título </option>
+                <option value="tipo">Tipo </option>
+            </select>
+        </div>
+        <!-- Campo principal -->
+        <div class="row" id="textOrNumberRow">
+            <input type="text" id="searchLibro" placeholder="Introduce el ID del autor…" />
+        </div>
+        <!-- Selector de tipo (enum) — oculto por defecto -->
+        <div class="row" id="tipoRow" style="display:none;">
+            <label for="tipoEnum">Tipo:</label>
+            <select id="tipoEnum">
+                <option value="NOVELA">NOVELA</option>
+                <option value="ENSAYO">ENSAYO</option>
+                <option value="POESIA">POESIA</option>
+                <option value="TEATRO">TEATRO</option>
+            </select>
+        </div>
+        <button id="btnBuscar" onclick="renderResultados()">Buscar</button>
+    </div>
     <div class="col-libros">
         <h2>Libros disponibles</h2>
         <div id="listaLibros" class="lista-libros">
@@ -125,6 +155,9 @@
         <label>ID Lector</label>
         <input type="number" id="prestar_idLector">
 
+        <label>Fecha límite</label>
+        <input type="number" id="prestar_fechaLimite">
+
         <div class="botones">
             <button class="btn-cancelar" onclick="cerrarModal('#modalPrestar')">Cancelar</button>
             <button class="btn-aceptar" id="btnConfirmarPrestamo">Confirmar</button>
@@ -133,9 +166,10 @@
 </div>
 <!-- MODAL: Gestionar socios (Lectores) -->
 <div id="modalSocios" class="modal-fondo">
+    <button type="button" class="btn-close" id="btnCerrarSocios"> </button>
+
     <div class="modal modal-large">
         <h4>Gestionar socios</h4>
-
         <!-- Menú de acciones -->
         <div class="socios-menu">
             <button type="button" class="btn-socios" data-section="listar">Mostrar socios</button>

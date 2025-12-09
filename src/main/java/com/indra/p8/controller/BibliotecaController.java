@@ -65,6 +65,7 @@ public class BibliotecaController {
     public void pagarMulta(@PathVariable Long multaId){
         multaService.pagarMulta(multaId);
     }
+
     @GetMapping("/export/pdf")
     public ResponseEntity<byte[]> exportPdf() {
         byte[] bytes = multaService.exportarMultasPdf();
