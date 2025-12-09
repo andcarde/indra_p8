@@ -24,6 +24,13 @@ public class Multa {
     @Column(name = "f_fin")
     private LocalDate fFin;
 
+    @Column(name = "monto", nullable = false)
+    private float monto;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estado", nullable = false)
+    private EstadoMulta estado;
+
     @OneToOne
     @JoinColumn(name = "id_lector", nullable = false)
     private Lector lector;

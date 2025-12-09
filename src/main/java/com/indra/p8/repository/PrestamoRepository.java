@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface PrestamoRepository extends JpaRepository<Prestamo, Long> {
     List<Prestamo> findByLector(Optional<Lector> lector);
     List<Prestamo> findByCopiaId(Long idCopia);
+    List<Prestamo> findByLectorId(Long idLector);
 }

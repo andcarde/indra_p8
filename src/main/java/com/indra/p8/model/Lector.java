@@ -22,10 +22,19 @@ public class Lector {
     private String nombre;
 
     @Column
+    private String apellido;
+
+    @Column
     private String telefono;
 
     @Column
+    private String email;
+
+    @Column
     private String direccion;
+
+    @Column
+    private String estado; //Activo/Suspendido
 
     @OneToMany(mappedBy = "lector")
     private List<Prestamo> prestamos;

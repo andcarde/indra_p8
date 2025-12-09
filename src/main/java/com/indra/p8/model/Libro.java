@@ -31,11 +31,16 @@ public class Libro {
     @Column
     private int anyo;
 
+
+    @Column(unique = true)
+    private int isbn;
+
+
     @ManyToOne
     @JoinColumn(name = "id_autor", nullable = false)
     private Autor autor;
 
-    @OneToMany(mappedBy = "libro")
+    @OneToMany(mappedBy = "libro",cascade = CascadeType.REMOVE,orphanRemoval = true)
     @JsonIgnore
     private List<Copia> copias;
 }

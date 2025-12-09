@@ -12,6 +12,7 @@ $(document).ready(function () {
     cargarLibro(idLibro);
     cargarCopiasLibro(idLibro);
     $("#btnCrearCopia").click(() => abrirModal("#modalNumCopias"));
+    $("#btnModificarLibro").click(() => abrirModal("#modalUpdateLibro"));
 });
 
 function cargarLibro(idLibro) {
@@ -28,6 +29,7 @@ function cargarLibro(idLibro) {
 
             $("#tituloLibro").text(libro.titulo || "Libro");
             $("#nombreAutor").text(libro.autor.nombre + " es de " + libro.autor.nacionalidad|| "");
+            $("#ISBN").text(libro.ISBN);
             const numCopias = libro.copias ? libro.copias.length : "—";
             $("#numCopias").text(numCopias);
         },
@@ -123,4 +125,49 @@ function cerrarModal(selector) {
 
 function volver() {
     window.location.href = "/biblioteca";
+}
+
+function deleteLibro(){
+    const params = new URLSearchParams(window.location.search);
+    const idLibro = params.get("id");
+    $.ajax({
+        url: "/biblioteca/libro/" +encodeURIComponent(idLibro)+"/delete",
+        type: "DELETE",
+        contentType: "application/json",
+        success: () => {
+            window.location.href = "/biblioteca";
+        },
+        error: e => {
+            showMessage("No se ha podido borrar el libro");
+        }
+    });
+}
+function updateLibro(){
+    const params = new URLSearchParams(window.location.search);
+    const idLibro = params.get("id");
+    const titulo= $("#libroTituloInput").val().trim();
+    if(!titulo){
+        showMessage("Falta el titulo del libro");
+        return;
+    }
+    const payload = {
+        titulo: $("#libroTituloInput").val(),
+        tipo: $("#libroTipo").val(),
+        editorial: $("#libroEditorial").val(),
+        anyo: parseInt($("#libroAnyo").val(), 10),
+        isbn:parseInt($("#libroISBN").val()),
+        idAutor: parseInt($("#libroAutorId").val(), 10)
+    };
+    $.ajax({
+        url: "/biblioteca/libro/" +encodeURIComponent(idLibro)+"/update",
+        type: "PUT",
+        contentType: "application/json",
+        data:JSON.stringify(payload),
+        success: () => {
+            window.location.href = "/libro?id=" + encodeURIComponent(idLibro);
+        },
+        error: e => {
+            showMessage("No se ha podido actualizar el libro");
+        }
+    });
 }

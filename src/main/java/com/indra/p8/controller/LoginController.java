@@ -17,12 +17,16 @@ public class LoginController {
         return "login"; // templates/login.html
     }
 
-    @PostMapping("/crearBibliotecario")
-    @ResponseBody
-    public ResponseEntity<String> crearBibliotecario(@RequestParam String username,
-                                                     @RequestParam String password) {
+    @GetMapping("/registro")
+    public String mostrarFormularioRegistro() {
+        return "register"; // templates/registro.html
+    }
+
+    @PostMapping("/registro")
+    public String procesarRegistro(@RequestParam String username,
+                                   @RequestParam String password) {
         loginService.crearBibliotecario(username, password);
-        return ResponseEntity.ok("Bibliotecario creado");
+        return "redirect:/login?registrado=true";
     }
 
     @GetMapping("/biblioteca")

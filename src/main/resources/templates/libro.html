@@ -42,7 +42,10 @@
         <div class="card-body">
             <h5 class="card-title">Ficha del Libro</h5>
             <p><strong>Autor:</strong> <span id="nombreAutor"></span></p>
+            <p><strong>ISBN:</strong><span id="ISBN"></span></p>
             <p><strong>Número de copias:</strong> <span id="numCopias"></span></p>
+            <button class="btn-danger" onClick="deleteLibro()">Borrar Libro</button>
+            <button class="btn" id="btnModificarLibro"> Modificar Libro</button>
         </div>
     </div>
 
@@ -66,6 +69,7 @@
         </div>
     </div>
 </div>
+<!--  MODAL Crear copias Libro-->
 <div id="modalNumCopias" class="modal-fondo">
     <div class="modal">
         <h4>Crear copias libro</h4>
@@ -76,6 +80,33 @@
         <div class="botones">
             <button class="btn-cancelar" onclick="cerrarModal('#modalNumCopias')">Cancelar</button>
             <button class="btn-aceptar" onClick="crearCopiasLibro()">Confirmar</button>
+        </div>
+    </div>
+</div>
+<!-- MODAL Update Libro -->
+<div id="modalUpdateLibro" class="modal-fondo">
+    <div class="modal">
+        <h4>Crear Libro</h4>
+        <label>Título</label>
+        <input type="text" id="libroTituloInput" required>
+        <label>Tipo</label>
+        <select id="libroTipo">
+            <option value="NOVELA">NOVELA</option>
+            <option value="ENSAYO">ENSAYO</option>
+            <option value="POESIA">POESIA</option>
+            <option value="TEATRO">TEATRO</option>
+        </select>
+        <label>Editorial</label>
+        <input type="text" id="libroEditorial">
+        <label>Año</label>
+        <input type="number" id="libroAnyo" value="2025" min="0">
+        <label>ISBN</label>
+        <input type="number" id="libroISBN">
+        <label>ID Autor</label>
+        <input type="number" id="libroAutorId">
+        <div class="botones">
+            <button class="btn-cancelar" onclick="cerrarModal('#modalUpdateLibro')">Cancelar</button>
+            <button class="btn-aceptar" onclick="updateLibro()">Modificar</button>
         </div>
     </div>
 </div>

@@ -2,11 +2,14 @@ package com.indra.p8.controller;
 
 
 import com.indra.p8.DTOs.CrearAutorDTO;
+import com.indra.p8.DTOs.CrearLectorDTO;
 import com.indra.p8.DTOs.CrearLibroDTO;
 import com.indra.p8.DTOs.CrearPrestamoDTO;
 import com.indra.p8.model.*;
-import com.indra.p8.service.BibliotecaService;
+import com.indra.p8.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,19 +22,12 @@ public class BibliotecaController {
     @Autowired
     private BibliotecaService service;
 
-    @GetMapping("/libros")
-    public List<Libro> getLibros() {
-        return service.getLibros();
-    }
+    @Autowired
+    private MultaService multaService;
 
     @PostMapping("/crearAutor")
     public void crearAutor(@RequestBody CrearAutorDTO dto) {
         service.crearAutor(dto);
-    }
-
-    @PostMapping("/crearlibro")
-    public void crearLibro(@RequestBody CrearLibroDTO dto) {
-        service.crearLibro(dto);
     }
 
     @PostMapping("/crearcopia{idLibro}")
@@ -39,45 +35,6 @@ public class BibliotecaController {
         String message = service.crearCopia(idLibro, ncopias);
         return ResponseEntity.ok(message);
     }
-    @GetMapping("/prestamosLector/{idLector}")
-    public ResponseEntity<List<Prestamo>> getPrestamosLector(@PathVariable Long idLector){
-        return ResponseEntity.ok(service.getPrestamosLector(idLector));
-    }
-
-    @PutMapping("/devolucion{idPrestamo}")
-    public ResponseEntity<Boolean> devolver(@PathVariable Long idPrestamo) {
-        boolean isOk = service.devolver(idPrestamo);
-        return ResponseEntity.ok(isOk);
-    }
-
-    @PostMapping("/prestar")
-    public ResponseEntity<String> prestar(@RequestBody CrearPrestamoDTO body) {
-        Long idLector = body.getIdLector();
-        Long idCopia = body.getIdCopia();
-        String responseText = service.prestar(idLector, idCopia);
-        return ResponseEntity.ok(responseText);
-    }
-
-    @PutMapping("/devolver/{idCopia}")
-    public ResponseEntity<Boolean> devolverCopia(@PathVariable Long idCopia){
-        boolean isOk=service.devolverCopia(idCopia);
-        return ResponseEntity.ok(isOk);
-    }
-
-    @GetMapping("/getLibro{idLibro}")
-    public ResponseEntity<Libro> getLibro(@PathVariable Long idLibro){
-        Libro libro = service.getLibroById(idLibro);
-        return ResponseEntity.ok(libro);
-    }
-    /*
-
-    @GetMapping("/getLibro/{idLibro}")
-    public String mostrarLibro(@PathVariable Long idLibro, Model model) {
-        Libro libro = service.getLibroById(idLibro);
-        model.addAttribute("libro", libro);
-        return "libro"; // Thymeleaf buscará libro.html en /templates
-    }
-     */
 
     @GetMapping("/getCopias{idLibro}")
     public ResponseEntity<List<Copia>> getCopiasByLibro(@PathVariable Long idLibro){
@@ -103,4 +60,18 @@ public class BibliotecaController {
     public void mandarBibliotecaCopia(@PathVariable Long idCopia){
         service.mandarBibliotecaCopia(idCopia);
     }
+
+    @PutMapping("/pagar_multa/{multaId}")
+    public void pagarMulta(@PathVariable Long multaId){
+        multaService.pagarMulta(multaId);
+    }
+    @GetMapping("/export/pdf")
+    public ResponseEntity<byte[]> exportPdf() {
+        byte[] bytes = multaService.exportarMultasPdf();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=multas.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(bytes);
+    }
+
 }

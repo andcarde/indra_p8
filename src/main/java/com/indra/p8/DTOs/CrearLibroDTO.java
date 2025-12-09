@@ -10,5 +10,6 @@ public class CrearLibroDTO {
     private TipoLibro tipo;
     private String editorial;
     private int anyo;
+    private int isbn;
     private Long idAutor;
 }

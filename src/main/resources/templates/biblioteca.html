@@ -39,6 +39,7 @@
     <!-- showCrearLibroModal() -->
     <button id="btnCrearAutor" class="secondary">Crear Autor</button>
     <button id="btnCrearLibro" class="secondary">Crear Libro</button>
+    <button id="btnGestionarSocios" class="secondary">Gestionar socios</button>
 </div>
 
 <!-- Layout principal: solo lista de libros -->
@@ -92,7 +93,7 @@
     <div class="modal">
         <h4>Crear Libro</h4>
         <label>Título</label>
-        <input type="text" id="libroTituloInput">
+        <input type="text" id="libroTituloInput" required>
         <label>Tipo</label>
         <select id="libroTipo">
             <option value="NOVELA">NOVELA</option>
@@ -104,6 +105,8 @@
         <input type="text" id="libroEditorial">
         <label>Año</label>
         <input type="number" id="libroAnyo" value="2025" min="0">
+        <label>ISBN</label>
+        <input type="number" id="libroISBN">
         <label>ID Autor</label>
         <input type="number" id="libroAutorId">
         <div class="botones">
@@ -128,5 +131,92 @@
         </div>
     </div>
 </div>
+<!-- MODAL: Gestionar socios (Lectores) -->
+<div id="modalSocios" class="modal-fondo">
+    <div class="modal modal-large">
+        <h4>Gestionar socios</h4>
+
+        <!-- Menú de acciones -->
+        <div class="socios-menu">
+            <button type="button" class="btn-socios" data-section="listar">Mostrar socios</button>
+            <button type="button" class="btn-socios" data-section="form">Crear / editar socio</button>
+            <button type="button" class="btn-socios" data-section="eliminar">Eliminar socio</button>
+        </div>
+
+        <!-- Sección: Listar socios -->
+        <div id="secListarSocios" class="sec-socios">
+            <table class="tabla-socios">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Teléfono</th>
+                    <th>Email</th>
+                    <th>Dirección</th>
+                    <th>Estado</th>
+                </tr>
+                </thead>
+                <tbody id="tbodySocios">
+                <!-- filas generadas por JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Sección: Formulario (crear / editar) -->
+        <div id="secFormSocio" class="sec-socios" style="display:none;">
+            <p>
+                Si quieres editar un socio existente, indica su ID y pulsa “Cargar socio”.
+                Si lo dejas vacío, se creará uno nuevo.
+            </p>
+            <label>ID Socio (para editar)</label>
+            <input type="number" id="lectorIdEditar">
+
+            <button type="button" class="btn-aux" id="btnCargarSocio">
+                Cargar socio
+            </button>
+
+            <hr>
+
+            <label>Nombre</label>
+            <input type="text" id="lectorNombre">
+
+            <label>Apellido</label>
+            <input type="text" id="lectorApellido">
+
+            <label>Teléfono</label>
+            <input type="text" id="lectorTelefono">
+
+            <label>Email</label>
+            <input type="email" id="lectorEmail">
+
+            <label>Dirección</label>
+            <input type="text" id="lectorDireccion">
+
+            <label>Estado</label>
+            <select id="lectorEstado">
+                <option value="ACTIVO">ACTIVO</option>
+                <option value="SUSPENDIDO">SUSPENDIDO</option>
+            </select>
+
+            <div class="botones">
+                <button class="btn-cancelar" onclick="cerrarModal('#modalSocios')">Cerrar</button>
+                <button class="btn-aceptar" id="btnGuardarSocio">Guardar</button>
+            </div>
+        </div>
+
+        <!-- Sección: Eliminar socio -->
+        <div id="secEliminarSocio" class="sec-socios" style="display:none;">
+            <label>ID Socio a eliminar</label>
+            <input type="number" id="lectorIdEliminar">
+
+            <div class="botones">
+                <button class="btn-cancelar" onclick="cerrarModal('#modalSocios')">Cerrar</button>
+                <button class="btn-aceptar" id="btnEliminarSocio">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
