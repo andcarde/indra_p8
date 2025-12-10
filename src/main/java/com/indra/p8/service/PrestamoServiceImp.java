@@ -40,13 +40,12 @@ public class PrestamoServiceImp implements PrestamoService {
             prestamoRepository.save(prestamo);
             copia.setEstado(EstadoCopia.BIBLIOTECA);
 
-            // Verificar retraso
-            LocalDate inicio = prestamo.getInicio();
+            // Gestión de multas
             LocalDate fin = prestamo.getFin();
-            long diasPrestamo = fin.toEpochDay() - inicio.toEpochDay();
+            LocalDate limite = prestamo.getLimite();
+            long diasRetraso = fin.toEpochDay() - limite.toEpochDay();
 
-            if (diasPrestamo > 30) {
-                long diasRetraso = diasPrestamo - 30;
+            if (diasRetraso > 0) {
                 int diasMulta = (int) diasRetraso * 2;
                 multaService.multar(lector, diasMulta);
             }
@@ -79,13 +78,12 @@ public class PrestamoServiceImp implements PrestamoService {
             prestamoRepository.save(prestamoActivo);
             copia.setEstado(EstadoCopia.BIBLIOTECA);
 
-            // Verificar retraso
-            LocalDate inicio = prestamoActivo.getInicio();
+            // Gestión de multas
             LocalDate fin = prestamoActivo.getFin();
-            long diasPrestamo = fin.toEpochDay() - inicio.toEpochDay();
+            LocalDate limite = prestamoActivo.getLimite();
+            long diasRetraso = fin.toEpochDay() - limite.toEpochDay();
 
-            if (diasPrestamo > 30) {
-                long diasRetraso = diasPrestamo - 30;
+            if (diasRetraso > 0) {
                 int diasMulta = (int) diasRetraso * 2;
                 multaService.multar(lector, diasMulta);
             }
