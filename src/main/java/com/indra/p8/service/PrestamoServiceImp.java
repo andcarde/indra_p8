@@ -31,35 +31,30 @@ public class PrestamoServiceImp implements PrestamoService {
 
     @Override
     public Error devolverByPrestamoId(Long idPrestamo) {
-        Optional<Prestamo> optionalPrestamo = prestamoRepository.findById(idPrestamo);
-        if (optionalPrestamo.isEmpty())
-            return new Error("PRESTAMO_NOT_EXISTS");
-        Prestamo prestamo = optionalPrestamo.get();
-        return devolver(prestamo);
-    }
-
-    private Error devolver(Prestamo prestamo) {
         try {
+            Prestamo prestamo = prestamoRepository.findById(idPrestamo).orElseThrow();
             Copia copia = prestamo.getCopia();
-            copia.setEstado(EstadoCopia.BIBLIOTECA);
-            copiaRepository.save(copia);
+            Lector lector = prestamo.getLector();
+
             prestamo.setFin(LocalDate.now());
             prestamoRepository.save(prestamo);
+            copia.setEstado(EstadoCopia.BIBLIOTECA);
 
-            // Gestión de multas
+            // Verificar retraso
+            LocalDate inicio = prestamo.getInicio();
             LocalDate fin = prestamo.getFin();
-            LocalDate limite = prestamo.getLimite();
-            long diasRetraso = fin.toEpochDay() - limite.toEpochDay();
+            long diasPrestamo = fin.toEpochDay() - inicio.toEpochDay();
 
-            if (diasRetraso > 0) {
-                Lector lector = prestamo.getLector();
+            if (diasPrestamo > 30) {
+                long diasRetraso = diasPrestamo - 30;
                 int diasMulta = (int) diasRetraso * 2;
                 multaService.multar(lector, diasMulta);
             }
-
+            copiaRepository.save(copia);
             return new Error();
+
         } catch (Exception e) {
-            return new Error("DATABASE_ERROR");
+            return new Error("Error al devolver copia");
         }
     }
 
