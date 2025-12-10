@@ -31,7 +31,8 @@ public class MultaServiceImp implements MultaService {
     private final float montoPorDia = 2;
 
     @Override
-    public void multar(Lector lector, int dias) {
+    public void multar(Long lectorId, int dias) {
+        Lector lector = lectorRepository.findById(lectorId).orElseThrow();
         Multa multa = new Multa();
         LocalDate inicio = LocalDate.now();
         LocalDate fin = LocalDate.now().plusDays(dias);
@@ -43,7 +44,9 @@ public class MultaServiceImp implements MultaService {
         multa.setLector(lector);
         multaRepository.save(multa);
 
-        lector.setMulta(multa);
+        List<Multa> multas = lector.getMultas();
+        multas.add(multa);
+        lector.setMultas(multas);
         lectorRepository.save(lector);
     }
 

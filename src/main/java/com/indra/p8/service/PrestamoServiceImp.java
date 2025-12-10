@@ -1,9 +1,6 @@
 package com.indra.p8.service;
 
-import com.indra.p8.model.Copia;
-import com.indra.p8.model.EstadoCopia;
-import com.indra.p8.model.Lector;
-import com.indra.p8.model.Prestamo;
+import com.indra.p8.model.*;
 import com.indra.p8.repository.CopiaRepository;
 import com.indra.p8.repository.LectorRepository;
 import com.indra.p8.repository.PrestamoRepository;
@@ -37,7 +34,6 @@ public class PrestamoServiceImp implements PrestamoService {
             Lector lector = prestamo.getLector();
 
             prestamo.setFin(LocalDate.now());
-            prestamoRepository.save(prestamo);
             copia.setEstado(EstadoCopia.BIBLIOTECA);
 
             // Gestión de multas
@@ -47,8 +43,9 @@ public class PrestamoServiceImp implements PrestamoService {
 
             if (diasRetraso > 0) {
                 int diasMulta = (int) diasRetraso * 2;
-                multaService.multar(lector, diasMulta);
+                multaService.multar(lector.getId(), diasMulta);
             }
+            prestamoRepository.save(prestamo);
             copiaRepository.save(copia);
             return new Error();
         } catch (Exception e) {
@@ -75,7 +72,6 @@ public class PrestamoServiceImp implements PrestamoService {
             Lector lector = prestamoActivo.getLector();
 
             prestamoActivo.setFin(LocalDate.now());
-            prestamoRepository.save(prestamoActivo);
             copia.setEstado(EstadoCopia.BIBLIOTECA);
 
             // Gestión de multas
@@ -85,8 +81,9 @@ public class PrestamoServiceImp implements PrestamoService {
 
             if (diasRetraso > 0) {
                 int diasMulta = (int) diasRetraso * 2;
-                multaService.multar(lector, diasMulta);
+                multaService.multar(lector.getId(), diasMulta);
             }
+            prestamoRepository.save(prestamoActivo);
             copiaRepository.save(copia);
             return new Error();
 
@@ -106,8 +103,16 @@ public class PrestamoServiceImp implements PrestamoService {
         Copia copia = copiaRepository.findById(idCopia).orElseThrow();
 
 
+        Multa ultimaMulta = lector.getMultas().stream()
+                .filter(m -> m.getEstado() == EstadoMulta.PENDIENTE
+                        || (m.getEstado() == EstadoMulta.PAGADA
+                        && (m.getFFin() == null || !m.getFFin().isBefore(LocalDate.now()))))
+                .max(Comparator.comparing(Multa::getFInicio, Comparator.nullsLast(Comparator.naturalOrder())))
+                .orElse(null);
+
+
         // ACTIVE_MULTA: "No se puede prestar debido a que el lector tiene una multa activa."
-        if (lector.getMulta() != null && lector.getMulta().getFFin().isAfter(LocalDate.now()))
+        if (ultimaMulta != null)
             return new Error("ACTIVE_MULTA");
 
         // ACTIVE_MULTA: "La copia no está disponible."

@@ -40,7 +40,7 @@ public class Lector {
     @OneToMany(mappedBy = "lector")
     private List<Prestamo> prestamos;
 
-    @OneToOne(mappedBy = "lector", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lector", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Multa multa;
+    private List<Multa> multas;
 }

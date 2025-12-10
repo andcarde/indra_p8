@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface MultaService {
 
-    void multar(Lector lector, int dias);
+    void multar(Long lectorId, int dias);
     void pagarMulta(Long multaId);
     byte[] exportarMultasPdf();
 }

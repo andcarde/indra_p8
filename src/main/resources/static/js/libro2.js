@@ -28,7 +28,7 @@ function cargarLibro(idLibro) {
             }
 
             $("#tituloLibro").text(libro.titulo || "Libro");
-            $("#nombreAutor").text(libro.autor.nombre + " es de " + libro.autor.nacionalidad|| "");
+            $("#nombreAutor").text(libro.autor.nombre);
             $("#ISBN").text(libro.isbn);
             const numCopias = libro.copias ? libro.copias.length : "—";
             $("#numCopias").text(numCopias);

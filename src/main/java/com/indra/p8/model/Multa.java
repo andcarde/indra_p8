@@ -31,7 +31,7 @@ public class Multa {
     @Column(name = "estado", nullable = false)
     private EstadoMulta estado;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_lector", nullable = false)
     private Lector lector;
 }
