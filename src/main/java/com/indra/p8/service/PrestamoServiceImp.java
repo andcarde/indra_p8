@@ -51,8 +51,8 @@ public class PrestamoServiceImp implements PrestamoService {
             }
             copiaRepository.save(copia);
             return new Error();
-
         } catch (Exception e) {
+            System.out.println("Excepción saltada en idPrestamo");
             return new Error("Error al devolver copia");
         }
     }
@@ -93,7 +93,6 @@ public class PrestamoServiceImp implements PrestamoService {
         } catch (Exception e) {
             return new Error("Error al devolver copia");
         }
-
     }
 
     @Override

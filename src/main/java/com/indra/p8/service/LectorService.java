@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface LectorService {
     Lector crearLector(CrearLectorDTO dto);
-    void updateLector(Long idLector, CrearLectorDTO dto);
+    void updateLector(Long idLector, CrearLectorDTO dto) throws RuntimeException;
     Lector getLector(Long idLector);
     void deleteLector(Long idLector);
     List<Lector> getLectores();

@@ -103,11 +103,10 @@ function cargarTabla(tab) {
         case "lector":
             $("#btnBuscarPrestamosLector").on("click", function () {
                 const id = $("#inputIdLector").val();
-                if (!id) {
+                if (!id)
                     alert("Introduce un ID de lector");
-                    return;
-                }
-                cargarPrestamoByIdLector(id);
+                else
+                    cargarPrestamoByIdLector(id);
             });
             break;
     }
@@ -120,7 +119,7 @@ function cargarActivos() {
         url: "/biblioteca/prestamosActivos",
         method: "GET",
         success: function (data) {
-            rellenarTabla(data, false);
+            rellenarTabla(data, true, false);
         }
     });
 }
@@ -130,7 +129,7 @@ function cargarHistoricos() {
         url: "/biblioteca/prestamosHistoricos",
         method: "GET",
         success: function (data) {
-            rellenarTabla(data, true);
+            rellenarTabla(data, true, true);
         }
     });
 }
@@ -140,8 +139,7 @@ function cargarPrestamoByIdLector(idLector) {
         url: "/biblioteca/prestamosLector/" + idLector,
         method: "GET",
         success: function (data) {
-            // el endpoint devuelve 1 solo DTO, rellenarTabla necesita un array
-            rellenarTabla([data], true);
+            rellenarTabla(data, false, true);
         },
         error: function (jqXHR) {
             closeAndShowMessage(jqXHR,
@@ -151,26 +149,29 @@ function cargarPrestamoByIdLector(idLector) {
     });
 }
 
-function rellenarTabla(lista, incluirFin) {
+function rellenarTabla(lista, incluirLectorId, incluirFin) {
 
     let html = "";
 
     lista.forEach(p => {
-
         html += `
     <tr>
         <td>${p.idCopia}</td>`;
-
-        if (p.idLector !== undefined && p.idLector !== null)
+        if (incluirLectorId) {
+            if (p.idLector === undefined || p.idLector === null)
+                p.idLector = "";
             html += `<td>${p.idLector}</td>`;
+        }
 
         html += `
         <td>${p.inicio}</td>
         <td>${p.limite}</td>`;
 
-        if (incluirFin)
-            html += `<td>${p.fin ?? ""}</td>`;
-
+        if (incluirFin ) {
+            if (p.fin === undefined || p.fin === null || p.fin === "null")
+                p.fin = "";
+            html += `<td>${p.fin}</td>`;
+        }
         html += `</tr>`;
     });
 

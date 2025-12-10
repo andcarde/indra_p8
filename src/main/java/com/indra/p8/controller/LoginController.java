@@ -28,16 +28,30 @@ public class LoginController {
     public String crearUsuarioDesdeAdmin(@RequestParam String username,
                                          @RequestParam String password,
                                          @RequestParam Rol rol) {
-        loginService.crearBibliotecario(username, password);
+        loginService.crearUsuario(username, password, rol);
         return "redirect:/admin/usuarios";
     }
 
     @PostMapping("/registro")
     public String procesarRegistro(@RequestParam String username,
-                                   @RequestParam String password) {
-        loginService.crearBibliotecario(username, password);
+                                   @RequestParam String password,
+                                   @RequestParam String passwordConfirm,
+                                   org.springframework.ui.Model model) {
+
+        if (!password.equals(passwordConfirm)) {
+            model.addAttribute("error", "Las contraseñas no coinciden.");
+            return "register";  // vuelve a la misma vista
+        }
+        try {
+            loginService.crearBibliotecario(username, password);
+
+        } catch (Exception e) {
+            model.addAttribute("error", "No se pudo registrar. Es posible que el usuario ya exista.");
+            return "register";
+        }
         return "redirect:/login?registrado=true";
     }
+
 
     @GetMapping("/biblioteca")
     public String getBibliotecaPage() {

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Detalle de libro</title>
@@ -33,7 +35,7 @@
 </header>
 <div class="toolbar">
     <!-- showPrestarModal() -->
-    <button id="btnCrearCopia">Crear Copia</button>
+    <button id="btnCrearCopia" sec:authorize="hasRole('ADMIN')">Crear Copia</button>
 </div>
 <div class="container mt-4">
     <h1 id="tituloLibro" class="text-primary mb-4">Libro</h1>
@@ -44,8 +46,8 @@
             <p><strong>Autor:</strong> <span id="nombreAutor"></span></p>
             <p><strong>ISBN:</strong><span id="ISBN"></span></p>
             <p><strong>Número de copias:</strong> <span id="numCopias"></span></p>
-            <button class="btn btn-danger" onClick="deleteLibro()">Borrar Libro</button>
-            <button class="btn btn-primary" id="btnModificarLibro"> Modificar Libro</button>
+            <button class="btn btn-danger" onClick="deleteLibro()" sec:authorize="hasRole('ADMIN')">Borrar Libro</button>
+            <button class="btn btn-primary" id="btnModificarLibro" sec:authorize="hasRole('ADMIN')"> Modificar Libro</button>
         </div>
     </div>
 
@@ -79,7 +81,7 @@
 
         <div class="botones">
             <button class="btn-cancelar" onclick="cerrarModal('#modalNumCopias')">Cancelar</button>
-            <button class="btn-aceptar" onClick="crearCopiasLibro()">Confirmar</button>
+            <button class="btn-aceptar" onClick="crearCopiasLibro()" sec:authorize="hasRole('ADMIN')">Confirmar</button>
         </div>
     </div>
 </div>
@@ -106,7 +108,7 @@
         <input type="number" id="libroAutorId">
         <div class="botones">
             <button class="btn-cancelar" onclick="cerrarModal('#modalUpdateLibro')">Cancelar</button>
-            <button class="btn-aceptar" onclick="updateLibro()">Modificar</button>
+            <button class="btn-aceptar" onclick="updateLibro()" sec:authorize="hasRole('ADMIN')">Modificar</button>
         </div>
     </div>
 </div>

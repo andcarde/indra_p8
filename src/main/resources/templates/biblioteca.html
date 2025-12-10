@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <title>Biblioteca Indra S.A. – Panel de Gestión</title>
@@ -34,17 +37,18 @@
 </header>
 
 <!-- Barra superior de acciones -->
-<div class="toolbar">
+<div class="toolbar" sec:authorize="!hasRole('SOCIO')">
     <!-- showPrestarModal() -->
     <button id="btnPrestar">Prestar</button>
     <button id="btnMostrarPrestamos">Mostrar préstamos</button>
     <button id="btnDevolverPrestamo">Devolver préstamo</button>
     <!-- showCrearLibroModal() -->
-    <button id="btnCrearAutor" class="secondary">Crear Autor</button>
-    <button id="btnCrearLibro" class="secondary">Crear Libro</button>
-    <button id="btnGestionarSocios" class="secondary">Gestionar socios</button>
-    <button id="btnExportarMultas" class="secondary">Exportar multas</button>
+    <button id="btnCrearAutor" class="secondary" sec:authorize="hasRole('ADMIN')">Crear Autor</button>
+    <button id="btnCrearLibro" class="secondary" sec:authorize="hasRole('ADMIN')">Crear Libro</button>
+    <button id="btnGestionarSocios" class="secondary" sec:authorize="hasRole('ADMIN')">Gestionar socios</button>
+    <button id="btnExportarMultas" class="secondary" sec:authorize="hasRole('ADMIN')">Exportar multas</button>
 </div>
+
 
 <!-- Layout principal: solo lista de libros -->
 <div class="main-layout">

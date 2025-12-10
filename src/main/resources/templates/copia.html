@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Detalle de copia</title>
@@ -44,16 +45,16 @@
     </div>
 
     <div class="card shadow-sm">
-        <div class="card-body">
+        <div class="card-body" sec:authorize="!hasRole('SOCIO')">
             <h5 class="card-title">Acciones</h5>
-            <button id="btnBaja" class="btn btn-danger me-2">
+            <button id="btnBaja" class="btn btn-danger me-2" sec:authorize="hasRole('ADMIN')">
                 Dar de baja
             </button>
-            <button id="btnReparar" class="btn btn-warning">
+            <button id="btnReparar" class="btn btn-warning" sec:authorize="hasRole('ADMIN')">
                 Enviar a reparación
             </button>
 
-            <button id="btnBiblioteca" class="btn btn-info">
+            <button id="btnBiblioteca" class="btn btn-info" sec:authorize="hasRole('ADMIN')">
                 Enviar a biblioteca
             </button>
 

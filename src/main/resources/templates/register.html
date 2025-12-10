@@ -96,6 +96,10 @@
 <div class="login-container">
     <h2>Registro Biblioteca Indra S.A.</h2>
 
+    <div th:if="${error}" style="color: red; margin-bottom: 15px; text-align: center;">
+        <span th:text="${error}"></span>
+    </div>
+
     <form action="/registro" method="post">
         <div class="form-group">
             <label for="usuario">Nombre de Usuario</label>

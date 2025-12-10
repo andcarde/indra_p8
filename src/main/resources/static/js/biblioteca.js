@@ -159,6 +159,7 @@ function crearLibro() {
         data: JSON.stringify(payload),
         success: () => {
             showMessage("Libro creado correctamente.");
+            cerrarModal("#modalLibro");
         },
         error: e => {
             showMessage("Error al crear libro: " + (e.status || "") + " " + (e.statusText || ""));
@@ -265,8 +266,10 @@ function guardarSocio() {
                 showMessage("Socio actualizado correctamente.");
                 cargarSocios();
             },
-            error: e => {
-                showMessage("Error al actualizar socio: " + (e.status || "") + " " + (e.statusText || ""));
+            error: jqXHR => {
+                closeAndShowMessage(jqXHR,
+                    "Socios",
+                    "Error al actualizar socio.");
             }
         });
     } else {

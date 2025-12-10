@@ -45,10 +45,16 @@ public class LectorController {
 
     // ACTUALIZAR
     @PutMapping("/{idLector}")
-    public ResponseEntity<Void> updateLector(@PathVariable Long idLector,
+    public ResponseEntity<?> updateLector(@PathVariable Long idLector,
                                              @RequestBody CrearLectorDTO lectorDto) {
-        lectorService.updateLector(idLector, lectorDto);
-        return ResponseEntity.noContent().build();
+        try {
+            lectorService.updateLector(idLector, lectorDto);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(e.getMessage());
+        }
     }
 
     // ELIMINAR

@@ -28,7 +28,7 @@ public class LectorServiceImp implements LectorService {
     }
 
     @Override
-    public void updateLector(Long idLector, CrearLectorDTO dto) {
+    public void updateLector(Long idLector, CrearLectorDTO dto) throws RuntimeException {
 
         Lector lector = lectorRepository.findById(idLector)
                 .orElseThrow(() -> new RuntimeException("No existe el socio"));

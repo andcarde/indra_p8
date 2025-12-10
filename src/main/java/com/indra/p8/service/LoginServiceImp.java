@@ -45,11 +45,10 @@ public class LoginServiceImp implements LoginService {
         String hash = bibliotecario.getPassword();
         return encoder.matches(password, hash);
     }
-
+    @Override
     public boolean crearUsuario(String username, String password, Rol rol) {
         if (bibliotecarioRepository.findByUsername(username).isPresent()) {
-            System.out.println("Registro: el usuario '" + username + "' ya existe.");
-            return false;
+            throw new RuntimeException("Usuario ya existe");
         }
 
         String hash = encoder.encode(password);
